@@ -1,0 +1,47 @@
+/* FONT VARIABLES */
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
+html {
+	font-size: 62.5%;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Ubuntu", sans-serif;
+	color: #333;
+	font-weight: 300;
+	line-height: 1.6;
+}
+
+/* ADD THIS - Forces cursor color globally */
+input,
+textarea,
+select {
+	caret-color: #e67e22;
+}
+
+.container {
+	display: grid;
+	grid-template-rows: min-content;
+	grid-template-columns:
+		[first-start] 8rem [first-end full-start] minmax(6rem, 1fr)
+		[center-start] repeat(8, [col-start] minmax(min-content, 13rem) [col-end])
+		[center-end] minmax(6rem, 1fr) [full-end last-start] 8rem [last-end];
+}
+
+.container--orange {
+	background-color: #fdf2e9;
+	min-height: 90vh;
+	padding: 5rem 0;
+}
+
+::selection {
+	background-color: #e67e22;
+	color: #fff;
+}

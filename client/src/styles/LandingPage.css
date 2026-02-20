@@ -1,0 +1,192 @@
+.landing-page {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #fdf2e9 0%, #fae5d3 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4rem 2rem;
+}
+
+.landing-container {
+	max-width: 120rem;
+	width: 100%;
+	text-align: center;
+}
+
+.landing-title {
+	font-size: 5rem;
+	font-weight: 700;
+	color: #2e1907;
+	margin-bottom: 1.5rem;
+	letter-spacing: -1px;
+}
+
+.landing-subtitle {
+	font-size: 2rem;
+	color: #767676;
+	margin-bottom: 6rem;
+	font-weight: 500;
+}
+
+.cards-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+	gap: 4rem;
+	max-width: 90rem;
+	margin: 0 auto;
+}
+
+.landing-card {
+	background: #fff;
+	border-radius: 20px;
+	padding: 5rem 4rem;
+	box-shadow: 0 2rem 6rem rgba(23, 13, 3, 0.12);
+	transition: all 0.4s;
+	border: 3px solid transparent;
+	position: relative;
+	overflow: hidden;
+}
+
+.landing-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 6px;
+	background: linear-gradient(90deg, #e67e22, #eb984e);
+	transform: scaleX(0);
+	transition: transform 0.4s;
+}
+
+.landing-card:hover {
+	transform: translateY(-1rem);
+	box-shadow: 0 3rem 8rem rgba(23, 13, 3, 0.2);
+}
+
+.landing-card:hover::before {
+	transform: scaleX(1);
+}
+
+.client-card:hover {
+	border-color: #e67e22;
+}
+
+.admin-card:hover {
+	border-color: #e67e22;
+}
+
+.card-icon {
+	font-size: 8rem;
+	margin-bottom: 2rem;
+	animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-1rem);
+	}
+}
+
+.card-title {
+	font-size: 3rem;
+	font-weight: 700;
+	color: #2e1907;
+	margin-bottom: 1.5rem;
+}
+
+.card-description {
+	font-size: 1.6rem;
+	color: #767676;
+	margin-bottom: 3rem;
+	line-height: 1.6;
+}
+
+.card-btn {
+	width: 100%;
+	padding: 1.8rem 3rem;
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: #fff;
+	border: none;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.3s;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	position: relative;
+	overflow: hidden;
+}
+
+.card-btn::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.3);
+	transform: translate(-50%, -50%);
+	transition:
+		width 0.6s,
+		height 0.6s;
+}
+
+.card-btn:hover::before {
+	width: 30rem;
+	height: 30rem;
+}
+
+.client-btn {
+	background: linear-gradient(135deg, #ccc, #999);
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.admin-btn {
+	background: linear-gradient(135deg, #e67e22, #eb984e);
+}
+
+.admin-btn:hover {
+	background: linear-gradient(135deg, #cf711f, #e67e22);
+	transform: translateY(-3px);
+	box-shadow: 0 1rem 2rem rgba(230, 126, 34, 0.3);
+}
+
+.admin-btn:active {
+	transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.landing-title {
+		font-size: 3.5rem;
+	}
+
+	.landing-subtitle {
+		font-size: 1.6rem;
+		margin-bottom: 4rem;
+	}
+
+	.cards-container {
+		grid-template-columns: 1fr;
+		gap: 3rem;
+	}
+
+	.landing-card {
+		padding: 4rem 3rem;
+	}
+
+	.card-icon {
+		font-size: 6rem;
+	}
+
+	.card-title {
+		font-size: 2.4rem;
+	}
+}
