@@ -12,8 +12,22 @@ const offersRouter = require("./routes/offers");
 const customersRouter = require("./routes/customers");
 const stockRouter = require("./routes/stock");
 
-// Middleware
-app.use(cors());
+// UPDATED CORS - Allow your frontend domains
+app.use(
+	cors({
+		origin: [
+			"http://localhost:5173", // Local development
+			"http://localhost:5174", // Local development alternate
+			"https://simplywebdev.io", // Production
+			"https://www.simplywebdev.io", // Production with www
+			"http://simplywebdev.io", // Production HTTP
+			"http://www.simplywebdev.io", // Production HTTP with www
+		],
+		credentials: true,
+		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	}),
+);
+
 app.use(express.json());
 
 // Routes
@@ -28,6 +42,11 @@ app.get("/api/test", (req, res) => {
 	res.json({ message: "Backend is working!" });
 });
 
+// Health check for Render
+app.get("/health", (req, res) => {
+	res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+	console.log(`Server running on port ${PORT}`);
 });
