@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import Navbar from "./Navbar";
 import "../styles/ProductDetail.css";
 
@@ -21,7 +22,7 @@ function ProductDetail() {
 	const fetchProduct = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch(`http://localhost:5000/api/products/${id}`);
+			const response = await fetch(`${API_BASE_URL}/products/${id}`);
 			const data = await response.json();
 
 			if (data.success) {

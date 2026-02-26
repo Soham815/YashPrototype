@@ -11,6 +11,9 @@ const productsRouter = require("./routes/products");
 const offersRouter = require("./routes/offers");
 const customersRouter = require("./routes/customers");
 const stockRouter = require("./routes/stock");
+const freeStockRouter = require("./routes/freeStock");
+const offerPoolRouter = require("./routes/offerPool");
+const externalItemsRouter = require("./routes/externalItems");
 
 // UPDATED CORS - Allow your frontend domains
 app.use(
@@ -36,6 +39,9 @@ app.use("/api/products", productsRouter);
 app.use("/api/offers", offersRouter);
 app.use("/api/customers", customersRouter);
 app.use("/api/stock", stockRouter);
+app.use("/api/free-stock", freeStockRouter);
+app.use("/api/offer-pool", offerPoolRouter);
+app.use("/api/external-items", externalItemsRouter);
 
 // Test route
 app.get("/api/test", (req, res) => {

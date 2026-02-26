@@ -33,10 +33,10 @@
 }
 
 /* ============================================
-   GRID LAYOUT
+   GRID LAYOUT - FIXED CLASS NAME
    ============================================ */
 
-.admin-dashboard__grid {
+.admin-cards {
 	max-width: 120rem;
 	margin: 0 auto;
 	display: grid;
@@ -60,6 +60,7 @@
 	text-align: center;
 	position: relative;
 	overflow: hidden;
+	border: 2px solid transparent;
 }
 
 /* Top border animation */
@@ -157,6 +158,19 @@
 	background: linear-gradient(90deg, #27ae60, #229954);
 }
 
+/* Offer Pool - Purple */
+.admin-card--pool .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.admin-card--pool::before {
+	background: linear-gradient(90deg, #9b59b6, #8e44ad);
+}
+
+.admin-card--pool {
+	border-color: #9b59b6;
+}
+
 /* ============================================
    CARD CONTENT
    ============================================ */
@@ -181,13 +195,14 @@
 
 .admin-card__actions {
 	display: flex;
-	gap: 1.5rem;
+	flex-direction: column;
+	gap: 1.2rem;
 	width: 100%;
 	margin-top: auto;
 }
 
 .admin-card__btn {
-	flex: 1;
+	width: 100%;
 	padding: 1.4rem 2.5rem;
 	font-size: 1.5rem;
 	font-weight: 600;
@@ -236,10 +251,6 @@
 	box-shadow: 0 0.8rem 2rem rgba(230, 126, 34, 0.4);
 }
 
-.admin-card__btn--primary:active {
-	transform: translateY(-1px);
-}
-
 /* Secondary button - Outlined */
 .admin-card__btn--secondary {
 	background: #fff;
@@ -254,22 +265,43 @@
 	box-shadow: 0 0.8rem 2rem rgba(230, 126, 34, 0.3);
 }
 
-.admin-card__btn--secondary:active {
-	transform: translateY(-1px);
+/* Tertiary button - Gray */
+.admin-card__btn--tertiary {
+	background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+	color: #fff;
 }
 
-/* Full width button */
-.admin-card__btn--full {
-	flex: none;
-	width: 100%;
+.admin-card__btn--tertiary:hover {
+	background: linear-gradient(135deg, #7f8c8d, #5d6d7e);
+	transform: translateY(-2px);
+	box-shadow: 0 0.5rem 1.5rem rgba(127, 140, 141, 0.3);
 }
 
+/* Three-button layout for Stock card */
+.admin-card__actions--three {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+/* External Items Card - Teal/Turquoise */
+.admin-card--external .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+
+.admin-card--external::before {
+	background: linear-gradient(90deg, #1abc9c, #16a085);
+}
+
+.admin-card--external {
+	border-color: #1abc9c;
+}
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 
 @media (max-width: 1024px) {
-	.admin-dashboard__grid {
+	.admin-cards {
 		grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
 		gap: 2.5rem;
 	}
@@ -292,7 +324,7 @@
 		font-size: 1.6rem;
 	}
 
-	.admin-dashboard__grid {
+	.admin-cards {
 		grid-template-columns: 1fr;
 		gap: 2rem;
 	}
@@ -327,13 +359,5 @@
 
 	.admin-dashboard__title {
 		font-size: 3rem;
-	}
-
-	.admin-card__actions {
-		flex-direction: column;
-	}
-
-	.admin-card__btn {
-		width: 100%;
 	}
 }

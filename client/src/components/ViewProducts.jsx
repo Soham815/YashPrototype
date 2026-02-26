@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "../styles/ViewProducts.css";
 
 function ViewProducts() {
@@ -47,7 +48,7 @@ function ViewProducts() {
 	const fetchProducts = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch("http://localhost:5000/api/products");
+			const response = await fetch(`${API_BASE_URL}/products`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -66,7 +67,7 @@ function ViewProducts() {
 
 	const fetchProductOffers = async (productId) => {
 		try {
-			const response = await fetch("http://localhost:5000/api/offers");
+			const response = await fetch(`${API_BASE_URL}/offers`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -84,14 +85,11 @@ function ViewProducts() {
 
 	const handleToggleOfferActive = async (offerId, currentStatus, productId) => {
 		try {
-			const response = await fetch(
-				`http://localhost:5000/api/offers/${offerId}`,
-				{
-					method: "PUT",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ is_active: !currentStatus }),
-				},
-			);
+			const response = await fetch(`${API_BASE_URL}/offers/${offerId}`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ is_active: !currentStatus }),
+			});
 
 			if (response.ok) {
 				setSelectedProductOffers((prevOffers) =>
@@ -163,12 +161,9 @@ function ViewProducts() {
 
 		try {
 			setDeletingProductId(productId);
-			const response = await fetch(
-				`http://localhost:5000/api/products/${productId}`,
-				{
-					method: "DELETE",
-				},
-			);
+			const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
+				method: "DELETE",
+			});
 
 			const data = await response.json();
 

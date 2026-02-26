@@ -392,6 +392,148 @@
 	text-align: right;
 }
 
+/* ============================================
+   ENHANCED OFFER DISPLAY
+   ============================================ */
+
+.offer-row {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: center;
+	gap: 2rem;
+	padding: 2.5rem 3rem;
+	border-bottom: 2px solid #fae5d3;
+	transition: all 0.3s;
+}
+
+.offer-info-cell {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.offer-info-header {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.offer-product-name {
+	font-size: 1.9rem;
+	font-weight: 700;
+	color: #2e1907;
+	margin: 0;
+}
+
+.offer-type-badge {
+	padding: 0.5rem 1.2rem;
+	border-radius: 6px;
+	font-size: 1.3rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.offer-type-badge--free {
+	background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+	color: #2e7d32;
+	border: 2px solid #4caf50;
+}
+
+.offer-type-badge--discount {
+	background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+	color: #e65100;
+	border: 2px solid #ff9800;
+}
+
+.offer-company {
+	font-size: 1.3rem;
+	color: #767676;
+	margin: 0;
+}
+
+.offer-details-text {
+	font-size: 1.5rem;
+	color: #555;
+	margin: 0;
+	line-height: 1.6;
+}
+
+.offer-pool-info {
+	margin-top: 0.8rem;
+}
+
+.pool-badge {
+	display: inline-block;
+	padding: 0.5rem 1rem;
+	background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+	color: #6a1b9a;
+	border-radius: 6px;
+	font-size: 1.2rem;
+	font-weight: 600;
+	border: 1.5px solid #9b59b6;
+}
+
+/* Actions Cell */
+.offer-actions-cell {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 1.5rem;
+}
+
+.delete-offer-btn {
+	padding: 0.8rem 1.6rem;
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: #fff;
+	background: linear-gradient(135deg, #e74c3c, #c0392b);
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.3s;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.delete-offer-btn:hover {
+	background: linear-gradient(135deg, #c0392b, #a93226);
+	transform: translateY(-2px);
+	box-shadow: 0 0.5rem 1.5rem rgba(231, 76, 60, 0.3);
+}
+
+/* Filter Row Updates */
+.search-filter-row {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	gap: 1.5rem;
+	margin-bottom: 3rem;
+	align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	.search-filter-row {
+		grid-template-columns: 1fr;
+	}
+
+	.offer-row {
+		grid-template-columns: 1fr;
+	}
+
+	.offer-actions-cell {
+		align-items: flex-start;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.offer-info-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
 	.offer-row {

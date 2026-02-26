@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { API_BASE_URL } from "../config/api";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import "leaflet/dist/leaflet.css";
@@ -230,7 +231,7 @@ function CustomerSignup() {
 				longitude: mapPosition.lng,
 			};
 
-			const response = await fetch("http://localhost:5000/api/customers", {
+			const response = await fetch(`${API_BASE_URL}/customers`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(submitData),

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import Navbar from "./Navbar";
 import "../styles/SearchResults.css";
 
@@ -40,7 +41,7 @@ function SearchResults() {
 	const fetchProducts = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch("http://localhost:5000/api/products");
+			const response = await fetch(`${API_BASE_URL}/products`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -70,7 +71,7 @@ function SearchResults() {
 
 	const fetchStockData = async () => {
 		try {
-			const response = await fetch("http://localhost:5000/api/stock");
+			const response = await fetch(`${API_BASE_URL}/stock`);
 			const data = await response.json();
 			if (data.success) {
 				// Convert to lookup object: { productId: stockInfo }

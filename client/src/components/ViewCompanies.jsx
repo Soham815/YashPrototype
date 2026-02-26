@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "../styles/ViewCompanies.css";
 
 function ViewCompanies() {
@@ -34,7 +35,7 @@ function ViewCompanies() {
 	const fetchCompanies = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch("http://localhost:5000/api/companies");
+			const response = await fetch(`${API_BASE_URL}/companies`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -53,7 +54,7 @@ function ViewCompanies() {
 
 	const fetchCompanyProducts = async (companyId) => {
 		try {
-			const response = await fetch("http://localhost:5000/api/products");
+			const response = await fetch(`${API_BASE_URL}/products`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -115,7 +116,7 @@ function ViewCompanies() {
 		try {
 			setDeletingCompanyId(companyToDelete.id);
 			const response = await fetch(
-				`http://localhost:5000/api/companies/${companyToDelete.id}`,
+				`${API_BASE_URL}/companies/${companyToDelete.id}`,
 				{
 					method: "DELETE",
 					headers: { "Content-Type": "application/json" },

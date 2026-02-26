@@ -794,6 +794,155 @@
 	border: 2px solid #dc3545;
 }
 
+/* Action Type Selector */
+.action-type-selector {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.5rem;
+	margin-bottom: 2.5rem;
+}
+
+.action-type-btn {
+	padding: 1.4rem 2rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #767676;
+	background: #fdf2e9;
+	border: 2px solid #fae5d3;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.3s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.8rem;
+}
+
+.action-type-btn:hover {
+	border-color: #eb984e;
+	background: #fae5d3;
+}
+
+.action-type-btn.active {
+	color: #fff;
+	background: linear-gradient(135deg, #e67e22, #eb984e);
+	border-color: #e67e22;
+	box-shadow: 0 0.5rem 1.5rem rgba(230, 126, 34, 0.3);
+}
+
+/* Reason Radio Group */
+.reason-radio-group {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.reason-radio {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1.2rem 1.6rem;
+	background: #fdf2e9;
+	border: 2px solid #fae5d3;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.reason-radio:hover {
+	border-color: #eb984e;
+	background: #fae5d3;
+}
+
+.reason-radio input[type="radio"] {
+	width: 2rem;
+	height: 2rem;
+	cursor: pointer;
+	accent-color: #e67e22;
+}
+
+.reason-radio input[type="radio"]:checked + .reason-radio__text {
+	color: #e67e22;
+	font-weight: 700;
+}
+
+.reason-radio__text {
+	font-size: 1.5rem;
+	color: #2e1907;
+	font-weight: 500;
+	user-select: none;
+}
+
+/* Preview */
+.stock-form__preview {
+	margin-top: 1rem;
+	padding: 1rem 1.5rem;
+	background: #fdf2e9;
+	border-radius: 6px;
+	font-size: 1.4rem;
+	border-left: 4px solid #e67e22;
+}
+
+.stock-form__preview .positive {
+	color: #28a745;
+	font-weight: 700;
+}
+
+.stock-form__preview .negative {
+	color: #dc3545;
+	font-weight: 700;
+}
+
+/* Stock History Button in Header */
+.update-stock__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 4rem;
+	padding-bottom: 2rem;
+	border-bottom: 3px solid #eb984e;
+}
+
+.stock-history-btn {
+	padding: 1.2rem 2.5rem;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #fff;
+	background: linear-gradient(135deg, #3498db, #2980b9);
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	box-shadow: 0 0.5rem 1.5rem rgba(52, 152, 219, 0.3);
+}
+
+.stock-history-btn:hover {
+	background: linear-gradient(135deg, #2980b9, #21618c);
+	transform: translateY(-2px);
+	box-shadow: 0 0.8rem 2rem rgba(52, 152, 219, 0.4);
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+	.update-stock__header {
+		flex-direction: column;
+		gap: 1.5rem;
+		align-items: flex-start;
+	}
+
+	.stock-history-btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.action-type-selector {
+		grid-template-columns: 1fr;
+	}
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
 	.update-stock__body {

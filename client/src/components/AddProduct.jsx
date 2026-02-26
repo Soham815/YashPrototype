@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config/api";
 import "../styles/AddProduct.css";
 
 function AddProduct({ preSelectedCompanyId, productId }) {
@@ -51,7 +52,7 @@ function AddProduct({ preSelectedCompanyId, productId }) {
 
 	const fetchCompanies = async () => {
 		try {
-			const response = await fetch("http://localhost:5000/api/companies");
+			const response = await fetch(`${API_BASE_URL}/companies`);
 			const data = await response.json();
 			if (data.success) {
 				setCompanies(data.data);
@@ -64,7 +65,7 @@ function AddProduct({ preSelectedCompanyId, productId }) {
 	const fetchProductData = async (id) => {
 		try {
 			setFetchingData(true);
-			const response = await fetch(`http://localhost:5000/api/products/${id}`);
+			const response = await fetch(`${API_BASE_URL}/products/${id}`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -234,8 +235,8 @@ function AddProduct({ preSelectedCompanyId, productId }) {
 			});
 
 			const url = isEditMode
-				? `http://localhost:5000/api/products/${productId}`
-				: "http://localhost:5000/api/products";
+				? `${API_BASE_URL}/products/${productId}`
+				: `${API_BASE_URL}/products`;
 
 			const method = isEditMode ? "PUT" : "POST";
 

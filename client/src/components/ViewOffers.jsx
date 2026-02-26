@@ -1,31 +1,31 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/ViewOffers.css";
+import { API_BASE_URL } from "../config/api";
 
 function ViewOffers() {
 	const navigate = useNavigate();
 	const [offers, setOffers] = useState([]);
 	const [filteredOffers, setFilteredOffers] = useState([]);
 	const [searchQuery, setSearchQuery] = useState("");
-	const [sortBy, setSortBy] = useState("all");
+	const [filterType, setFilterType] = useState("all"); // 'all', 'free_item', 'discount'
+	const [sortBy, setSortBy] = useState("all"); // 'all', 'active', 'inactive'
 	const [loading, setLoading] = useState(true);
 	const [message, setMessage] = useState({ type: "", text: "" });
-	const [deletingOfferId, setDeletingOfferId] = useState(null);
 
 	useEffect(() => {
 		fetchOffers();
 	}, []);
 
+	// Filter offers
 	useEffect(() => {
 		let filtered = [...offers];
 
+		// Search filter
 		if (searchQuery.trim() !== "") {
 			filtered = filtered.filter((offer) => {
 				const productName = offer.products?.product_name || "";
-				const companyName =
-					offer.products?.companies?.company_name ||
-					offer.companies?.company_name ||
-					"";
+				const companyName = offer.companies?.company_name || "";
 
 				return (
 					productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -34,12 +34,19 @@ function ViewOffers() {
 			});
 		}
 
+		// Type filter
+		if (filterType !== "all") {
+			filtered = filtered.filter((offer) => offer.offer_type === filterType);
+		}
+
+		// Active/Inactive filter
 		if (sortBy === "active") {
 			filtered = filtered.filter((offer) => offer.is_active === true);
 		} else if (sortBy === "inactive") {
 			filtered = filtered.filter((offer) => offer.is_active === false);
 		}
 
+		// Sort active offers first
 		filtered.sort((a, b) => {
 			if (a.is_active && !b.is_active) return -1;
 			if (!a.is_active && b.is_active) return 1;
@@ -47,12 +54,12 @@ function ViewOffers() {
 		});
 
 		setFilteredOffers(filtered);
-	}, [searchQuery, sortBy, offers]);
+	}, [searchQuery, filterType, sortBy, offers]);
 
 	const fetchOffers = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch("http://localhost:5000/api/offers");
+			const response = await fetch(`${API_BASE_URL}/offers`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -69,28 +76,18 @@ function ViewOffers() {
 		}
 	};
 
-	const handleSearchChange = (e) => {
-		setSearchQuery(e.target.value);
-	};
-
-	const handleSortChange = (e) => {
-		setSortBy(e.target.value);
-	};
-
 	const handleToggleActive = async (offerId, currentStatus) => {
 		try {
-			const response = await fetch(
-				`http://localhost:5000/api/offers/${offerId}`,
-				{
-					method: "PUT",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ is_active: !currentStatus }),
-				},
-			);
+			const response = await fetch(`${API_BASE_URL}/offers/${offerId}`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ is_active: !currentStatus }),
+			});
 
 			const data = await response.json();
 
 			if (response.ok) {
+				// Update local state
 				setOffers((prevOffers) =>
 					prevOffers.map((offer) =>
 						offer.id === offerId
@@ -98,8 +95,6 @@ function ViewOffers() {
 							: offer,
 					),
 				);
-
-				await fetchOffers();
 
 				setMessage({
 					type: "success",
@@ -119,91 +114,98 @@ function ViewOffers() {
 		}
 	};
 
-	const getOfferDisplayName = (offer) => {
-		if (offer.products) {
-			return offer.products.product_name;
-		} else if (offer.companies) {
-			return `${offer.companies.company_name} (Company-wide)`;
+	const handleDeleteOffer = async (offerId) => {
+		if (
+			!window.confirm(
+				"Are you sure you want to delete this offer? This action cannot be undone.",
+			)
+		) {
+			return;
 		}
-		return "Unknown";
-	};
-
-	const getCompanyName = (offer) => {
-		if (offer.products?.companies) {
-			return offer.products.companies.company_name;
-		} else if (offer.companies) {
-			return offer.companies.company_name;
-		}
-		return "N/A";
-	};
-
-	const formatOfferDetails = (offer) => {
-		const details = [];
-
-		if (offer.min_product_weight) {
-			details.push(`Min: ${offer.min_product_weight}gm`);
-		}
-		if (offer.min_product_mrp) {
-			details.push(`Min MRP: ₹${offer.min_product_mrp}`);
-		}
-		if (offer.offer_item) {
-			details.push(`Free: ${offer.offer_item}`);
-		}
-		if (offer.offer_discount) {
-			details.push(`Discount: ₹${offer.offer_discount}`);
-		}
-
-		return details.length > 0 ? details.join(" | ") : "No details";
-	};
-
-	// ✅ Navigation handler using React Router
-	const handleAddOffer = () => {
-		navigate("/admin/offers/add");
-	};
-
-	// ✅ Delete handler (unchanged)
-	const handleDelete = async (offerId, offerName) => {
-		const confirmed = window.confirm(
-			`Are you sure you want to delete the offer for "${offerName}"?`,
-		);
-
-		if (!confirmed) return;
 
 		try {
-			setDeletingOfferId(offerId);
-			const response = await fetch(
-				`http://localhost:5000/api/offers/${offerId}`,
-				{
-					method: "DELETE",
-				},
-			);
+			const response = await fetch(`${API_BASE_URL}/offers/${offerId}`, {
+				method: "DELETE",
+			});
 
 			const data = await response.json();
 
 			if (response.ok) {
+				setOffers((prevOffers) =>
+					prevOffers.filter((offer) => offer.id !== offerId),
+				);
+
 				setMessage({
 					type: "success",
-					text: data.message || "Offer deleted successfully!",
+					text: "Offer deleted successfully!",
 				});
-				await fetchOffers();
+
 				setTimeout(() => setMessage({ type: "", text: "" }), 3000);
 			} else {
 				setMessage({
 					type: "error",
 					text: data.error || "Failed to delete offer",
 				});
-				setTimeout(() => setMessage({ type: "", text: "" }), 5000);
 			}
 		} catch (error) {
 			console.error("Error deleting offer:", error);
-			setMessage({
-				type: "error",
-				text: "Network error. Please try again.",
-			});
-			setTimeout(() => setMessage({ type: "", text: "" }), 5000);
-		} finally {
-			setDeletingOfferId(null);
+			setMessage({ type: "error", text: "Network error. Please try again." });
 		}
+	};
+
+	const getOfferDisplayName = (offer) => {
+		return offer.products?.product_name || "Unknown Product";
+	};
+
+	const getOfferDetails = (offer) => {
+		const conditions = [];
+
+		if (offer.min_product_weight) {
+			conditions.push(`Min: ${offer.min_product_weight}gm`);
+		}
+		if (offer.min_product_mrp) {
+			conditions.push(`Min MRP: ₹${offer.min_product_mrp}`);
+		}
+
+		const conditionText =
+			conditions.length > 0 ? conditions.join(" | ") : "No conditions";
+
+		if (offer.offer_type === "free_item") {
+			let freeItemText = "";
+			if (offer.free_item_type === "same_product") {
+				freeItemText = `Get ${offer.free_item_quantity} ${offer.products?.weight ? "gm" : "unit(s)"} of same product free`;
+			} else if (offer.free_item_type === "different_product") {
+				freeItemText = `Get ${offer.free_item_quantity} ${offer.free_item_product?.product_name || "product"} free`;
+			} else if (offer.free_item_type === "external") {
+				freeItemText = `Get ${offer.free_item_quantity} ${offer.free_item_external_name} free`;
+			}
+			return `${conditionText} → ${freeItemText}`;
+		} else if (offer.offer_type === "discount") {
+			const discountText =
+				offer.discount_type === "percentage"
+					? `${offer.discount_value}% off`
+					: `₹${offer.discount_value} off`;
+			return `${conditionText} → ${discountText}`;
+		}
+
+		return conditionText;
+	};
+
+	const getOfferTypeBadge = (offerType) => {
+		if (offerType === "free_item") {
+			return (
+				<span className="offer-type-badge offer-type-badge--free">
+					🎁 Free Item
+				</span>
+			);
+		} else if (offerType === "discount") {
+			return (
+				<span className="offer-type-badge offer-type-badge--discount">
+					💰 Discount
+				</span>
+			);
+		}
+		return null;
 	};
 
 	return (
@@ -211,7 +213,10 @@ function ViewOffers() {
 			{/* Header Row */}
 			<div className="page-header">
 				<h2 className="page-heading">Manage Offers</h2>
-				<button className="add-offer-header-btn" onClick={handleAddOffer}>
+				<button
+					className="add-offer-header-btn"
+					onClick={() => navigate("/admin/offers/add")}
+				>
 					<span className="btn-icon">+</span>
 					Add Offer
 				</button>
@@ -225,7 +230,7 @@ function ViewOffers() {
 						className="search-bar"
 						placeholder="Search by product or company name..."
 						value={searchQuery}
-						onChange={handleSearchChange}
+						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<span className="search-icon">🔍</span>
 				</div>
@@ -233,10 +238,22 @@ function ViewOffers() {
 				<div className="filter-wrapper">
 					<select
 						className="filter-select"
-						value={sortBy}
-						onChange={handleSortChange}
+						value={filterType}
+						onChange={(e) => setFilterType(e.target.value)}
 					>
-						<option value="all">All Offers</option>
+						<option value="all">All Types</option>
+						<option value="free_item">Free Items Only</option>
+						<option value="discount">Discounts Only</option>
+					</select>
+				</div>
+
+				<div className="filter-wrapper">
+					<select
+						className="filter-select"
+						value={sortBy}
+						onChange={(e) => setSortBy(e.target.value)}
+					>
+						<option value="all">All Status</option>
 						<option value="active">Active Only</option>
 						<option value="inactive">Inactive Only</option>
 					</select>
@@ -264,23 +281,38 @@ function ViewOffers() {
 									key={offer.id}
 									className={`offer-row ${!offer.is_active ? "inactive" : ""}`}
 								>
-									{/* Product/Company Name */}
-									<div className="offer-name-cell">
-										<h3>{getOfferDisplayName(offer)}</h3>
-										<span className="offer-company">
-											{getCompanyName(offer)}
-										</span>
-									</div>
-
-									{/* Offer Details */}
-									<div className="offer-details-cell">
-										<p className="offer-details-text">
-											{formatOfferDetails(offer)}
+									{/* Offer Info */}
+									<div className="offer-info-cell">
+										<div className="offer-info-header">
+											<h3 className="offer-product-name">
+												{getOfferDisplayName(offer)}
+											</h3>
+											{getOfferTypeBadge(offer.offer_type)}
+										</div>
+										<p className="offer-company">
+											{offer.companies?.company_name ||
+												offer.products?.companies?.company_name}
 										</p>
+										<p className="offer-details-text">
+											{getOfferDetails(offer)}
+										</p>
+
+										{/* Pool Info (if free_item type) */}
+										{offer.offer_type === "free_item" &&
+											offer.offer_pool &&
+											offer.offer_pool.length > 0 && (
+												<div className="offer-pool-info">
+													<span className="pool-badge">
+														🏊 Pool: {offer.offer_pool[0].accumulated_quantity}{" "}
+														items
+													</span>
+												</div>
+											)}
 									</div>
 
-									{/* Active Toggle */}
-									<div className="offer-toggle-cell">
+									{/* Actions */}
+									<div className="offer-actions-cell">
+										{/* Toggle Active */}
 										<label className="toggle-wrapper">
 											<input
 												type="checkbox"
@@ -296,18 +328,13 @@ function ViewOffers() {
 												{offer.is_active ? "Active" : "Inactive"}
 											</span>
 										</label>
-									</div>
 
-									{/* Delete Button */}
-									<div className="offer-delete-cell">
+										{/* Delete Button */}
 										<button
-											className="delete-btn"
-											onClick={() =>
-												handleDelete(offer.id, getOfferDisplayName(offer))
-											}
-											disabled={deletingOfferId === offer.id}
+											className="delete-offer-btn"
+											onClick={() => handleDeleteOffer(offer.id)}
 										>
-											{deletingOfferId === offer.id ? "Deleting..." : "Delete"}
+											🗑️ Delete
 										</button>
 									</div>
 								</div>

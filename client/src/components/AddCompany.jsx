@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "../styles/AddCompany.css";
 
 function AddCompany({ companyId }) {
@@ -26,7 +27,7 @@ function AddCompany({ companyId }) {
 	const fetchCompanyData = async (id) => {
 		try {
 			setFetchingData(true);
-			const response = await fetch(`http://localhost:5000/api/companies/${id}`);
+			const response = await fetch(`${API_BASE_URL}/companies/${id}`);
 			const data = await response.json();
 
 			if (data.success) {
@@ -93,8 +94,8 @@ function AddCompany({ companyId }) {
 			}
 
 			const url = isEditMode
-				? `http://localhost:5000/api/companies/${companyId}`
-				: "http://localhost:5000/api/companies";
+				? `${API_BASE_URL}/companies/${companyId}`
+				: `${API_BASE_URL}/companies`;
 
 			const method = isEditMode ? "PUT" : "POST";
 
