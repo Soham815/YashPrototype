@@ -1,0 +1,189 @@
+/* ============================================
+   LAZY LOAD LIST COMPONENT
+   ============================================ */
+
+.lazy-load-list {
+	width: 100%;
+}
+
+/* Grid layout */
+.lazy-load-list__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+	gap: 2.5rem;
+}
+
+.lazy-load-list__item {
+	width: 100%;
+}
+
+/* Loading state */
+.lazy-load-list__loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 8rem 2rem;
+	text-align: center;
+}
+
+.spinner {
+	width: 6rem;
+	height: 6rem;
+	border: 5px solid #fae5d3;
+	border-top: 5px solid #e67e22;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-bottom: 2rem;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.lazy-load-list__loading p {
+	font-size: 1.8rem;
+	color: #555;
+	font-weight: 500;
+}
+
+/* Error state */
+.lazy-load-list__error {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 8rem 2rem;
+	text-align: center;
+	background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+	border-radius: 16px;
+	border: 2px solid #dc3545;
+}
+
+.lazy-load-list__error p {
+	font-size: 1.8rem;
+	color: #721c24;
+	font-weight: 600;
+	margin-bottom: 2rem;
+}
+
+.lazy-load-list__error button {
+	padding: 1.2rem 3rem;
+	font-size: 1.6rem;
+	font-weight: 600;
+	color: #fff;
+	background: linear-gradient(135deg, #dc3545, #c82333);
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.lazy-load-list__error button:hover {
+	background: linear-gradient(135deg, #c82333, #bd2130);
+	transform: translateY(-2px);
+	box-shadow: 0 0.5rem 1.5rem rgba(220, 53, 69, 0.3);
+}
+
+/* Empty state */
+.lazy-load-list__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 8rem 2rem;
+	text-align: center;
+	background: #fff;
+	border-radius: 16px;
+	border: 2px solid #fae5d3;
+}
+
+.lazy-load-list__empty p {
+	font-size: 2rem;
+	color: #555;
+	font-weight: 600;
+}
+
+/* Scroll trigger (invisible) */
+.lazy-load-list__trigger {
+	height: 1px;
+	width: 100%;
+	margin-top: 2rem;
+}
+
+/* Loading more indicator */
+.lazy-load-list__loading-more {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 4rem 2rem;
+	text-align: center;
+}
+
+.lazy-load-list__loading-more .spinner {
+	width: 4rem;
+	height: 4rem;
+	border-width: 4px;
+	margin-bottom: 1rem;
+}
+
+.lazy-load-list__loading-more p {
+	font-size: 1.6rem;
+	color: #767676;
+	font-weight: 500;
+}
+
+/* End message */
+.lazy-load-list__end {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4rem 2rem;
+	text-align: center;
+}
+
+.lazy-load-list__end p {
+	font-size: 1.6rem;
+	color: #767676;
+	font-weight: 500;
+	font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	.lazy-load-list__grid {
+		grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+		gap: 2rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.lazy-load-list__grid {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+
+	.lazy-load-list__loading,
+	.lazy-load-list__error,
+	.lazy-load-list__empty {
+		padding: 6rem 1.5rem;
+	}
+
+	.spinner {
+		width: 5rem;
+		height: 5rem;
+		border-width: 4px;
+	}
+
+	.lazy-load-list__loading p,
+	.lazy-load-list__error p,
+	.lazy-load-list__empty p {
+		font-size: 1.6rem;
+	}
+}

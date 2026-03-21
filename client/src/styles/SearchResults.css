@@ -22,13 +22,13 @@
 	font-weight: 400;
 }
 
-/* IMPORTANT: Products grid using your exact grid system */
+/* FIXED: Products grid stays within parent bounds */
 .products {
-	grid-column: full-start/full-end;
+	grid-column: center-start/center-end;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-gap: 10rem;
-	padding: 5rem 10rem;
+	grid-gap: 6rem;
+	padding: 5rem 0;
 }
 
 .prod-result__link {
@@ -260,7 +260,7 @@
 	text-align: center;
 	padding: 10rem 2rem;
 	background: #fdf2e9;
-	grid-column: full-start/full-end;
+	grid-column: center-start/center-end;
 }
 
 .spinner {
@@ -366,21 +366,27 @@
 @media (max-width: 1400px) {
 	.products {
 		grid-template-columns: repeat(2, 1fr);
-		grid-gap: 7rem;
-		padding: 5rem 8rem;
+		grid-gap: 5rem;
 	}
 }
 
 @media (max-width: 900px) {
 	.products {
 		grid-template-columns: 1fr;
-		grid-gap: 5rem;
-		padding: 5rem 5rem;
+		grid-gap: 4rem;
 	}
 }
 
 @media (max-width: 600px) {
 	.products {
-		padding: 3rem 2rem;
+		padding: 3rem 0;
+	}
+
+	.search-result__title {
+		font-size: 3rem;
+	}
+
+	.search-result__count {
+		font-size: 1.6rem;
 	}
 }

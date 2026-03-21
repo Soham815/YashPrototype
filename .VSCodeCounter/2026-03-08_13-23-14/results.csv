@@ -1,0 +1,55 @@
+"filename", "language", "JSON", "XML", "Markdown", "JavaScript", "PostCSS", "JavaScript JSX", "HTML", "comment", "blank", "total"
+"d:\YashEnterprisesPrototype\client\README.md", "Markdown", 0, 0, 9, 0, 0, 0, 0, 0, 8, 17
+"d:\YashEnterprisesPrototype\client\eslint.config.js", "JavaScript", 0, 0, 0, 28, 0, 0, 0, 0, 2, 30
+"d:\YashEnterprisesPrototype\client\index.html", "HTML", 0, 0, 0, 0, 0, 0, 13, 0, 1, 14
+"d:\YashEnterprisesPrototype\client\package-lock.json", "JSON", 2811, 0, 0, 0, 0, 0, 0, 0, 1, 2812
+"d:\YashEnterprisesPrototype\client\package.json", "JSON", 31, 0, 0, 0, 0, 0, 0, 0, 1, 32
+"d:\YashEnterprisesPrototype\client\public\vite.svg", "XML", 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"d:\YashEnterprisesPrototype\client\src\App.css", "PostCSS", 0, 0, 0, 0, 37, 0, 0, 0, 6, 43
+"d:\YashEnterprisesPrototype\client\src\App.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 92, 0, 20, 26, 138
+"d:\YashEnterprisesPrototype\client\src\assets\react.svg", "XML", 0, 1, 0, 0, 0, 0, 0, 0, 0, 1
+"d:\YashEnterprisesPrototype\client\src\components\AddCompany.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 185, 0, 8, 30, 223
+"d:\YashEnterprisesPrototype\client\src\components\AddOffer.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 732, 0, 33, 70, 835
+"d:\YashEnterprisesPrototype\client\src\components\AddProduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 472, 0, 18, 60, 550
+"d:\YashEnterprisesPrototype\client\src\components\AdminDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 224, 0, 6, 10, 240
+"d:\YashEnterprisesPrototype\client\src\components\Breadcrumb.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 55, 0, 4, 10, 69
+"d:\YashEnterprisesPrototype\client\src\components\CustomerSignup.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 452, 0, 18, 57, 527
+"d:\YashEnterprisesPrototype\client\src\components\FreeStockHistory.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 230, 0, 14, 28, 272
+"d:\YashEnterprisesPrototype\client\src\components\LandingPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 39, 0, 2, 6, 47
+"d:\YashEnterprisesPrototype\client\src\components\ManageExternalItems.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 529, 0, 40, 74, 643
+"d:\YashEnterprisesPrototype\client\src\components\ManageFreeStock.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 604, 0, 19, 54, 677
+"d:\YashEnterprisesPrototype\client\src\components\Navbar.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 121, 0, 0, 12, 133
+"d:\YashEnterprisesPrototype\client\src\components\OfferPoolDashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 491, 0, 20, 54, 565
+"d:\YashEnterprisesPrototype\client\src\components\ProductDetail.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 212, 0, 2, 24, 238
+"d:\YashEnterprisesPrototype\client\src\components\SearchResults.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 344, 0, 3, 37, 384
+"d:\YashEnterprisesPrototype\client\src\components\StockHistory.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 243, 0, 15, 30, 288
+"d:\YashEnterprisesPrototype\client\src\components\UpdateStock.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 670, 0, 17, 57, 744
+"d:\YashEnterprisesPrototype\client\src\components\ViewCompanies.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 339, 0, 14, 30, 383
+"d:\YashEnterprisesPrototype\client\src\components\ViewOffers.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 302, 0, 16, 40, 358
+"d:\YashEnterprisesPrototype\client\src\components\ViewProducts.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 451, 0, 23, 46, 520
+"d:\YashEnterprisesPrototype\client\src\config\api.js", "JavaScript", 0, 0, 0, 3, 0, 0, 0, 1, 2, 6
+"d:\YashEnterprisesPrototype\client\src\index.css", "PostCSS", 0, 0, 0, 0, 61, 0, 0, 0, 8, 69
+"d:\YashEnterprisesPrototype\client\src\main.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 9, 0, 0, 2, 11
+"d:\YashEnterprisesPrototype\client\src\services\api.js", "JavaScript", 0, 0, 0, 6, 0, 0, 0, 0, 2, 8
+"d:\YashEnterprisesPrototype\client\src\styles\AddCompany.css", "PostCSS", 0, 0, 0, 0, 291, 0, 0, 10, 37, 338
+"d:\YashEnterprisesPrototype\client\src\styles\AddOffer.css", "PostCSS", 0, 0, 0, 0, 732, 0, 0, 48, 121, 901
+"d:\YashEnterprisesPrototype\client\src\styles\AddProduct.css", "PostCSS", 0, 0, 0, 0, 489, 0, 0, 10, 65, 564
+"d:\YashEnterprisesPrototype\client\src\styles\AdminDashboard.css", "PostCSS", 0, 0, 0, 0, 265, 0, 0, 39, 60, 364
+"d:\YashEnterprisesPrototype\client\src\styles\Breadcrumb.css", "PostCSS", 0, 0, 0, 0, 70, 0, 0, 1, 13, 84
+"d:\YashEnterprisesPrototype\client\src\styles\CustomerSignup.css", "PostCSS", 0, 0, 0, 0, 451, 0, 0, 11, 71, 533
+"d:\YashEnterprisesPrototype\client\src\styles\LandingPage.css", "PostCSS", 0, 0, 0, 0, 164, 0, 0, 1, 28, 193
+"d:\YashEnterprisesPrototype\client\src\styles\ManageExternalItems.css", "PostCSS", 0, 0, 0, 0, 539, 0, 0, 26, 92, 657
+"d:\YashEnterprisesPrototype\client\src\styles\ManageFreeStock.css", "PostCSS", 0, 0, 0, 0, 903, 0, 0, 36, 146, 1085
+"d:\YashEnterprisesPrototype\client\src\styles\Navbar.css", "PostCSS", 0, 0, 0, 0, 152, 0, 0, 1, 27, 180
+"d:\YashEnterprisesPrototype\client\src\styles\OfferPoolDashboard.css", "PostCSS", 0, 0, 0, 0, 607, 0, 0, 32, 108, 747
+"d:\YashEnterprisesPrototype\client\src\styles\ProductDetail.css", "PostCSS", 0, 0, 0, 0, 266, 0, 0, 4, 43, 313
+"d:\YashEnterprisesPrototype\client\src\styles\SearchResults.css", "PostCSS", 0, 0, 0, 0, 328, 0, 0, 8, 51, 387
+"d:\YashEnterprisesPrototype\client\src\styles\StockHistory.css", "PostCSS", 0, 0, 0, 0, 353, 0, 0, 25, 67, 445
+"d:\YashEnterprisesPrototype\client\src\styles\UpdateStock.css", "PostCSS", 0, 0, 0, 0, 826, 0, 0, 23, 139, 988
+"d:\YashEnterprisesPrototype\client\src\styles\ViewCompanies.css", "PostCSS", 0, 0, 0, 0, 680, 0, 0, 19, 103, 802
+"d:\YashEnterprisesPrototype\client\src\styles\ViewOffers.css", "PostCSS", 0, 0, 0, 0, 510, 0, 0, 19, 85, 614
+"d:\YashEnterprisesPrototype\client\src\styles\ViewProducts.css", "PostCSS", 0, 0, 0, 0, 736, 0, 0, 21, 124, 881
+"d:\YashEnterprisesPrototype\client\src\styles\style.css", "PostCSS", 0, 0, 0, 0, 39, 0, 0, 2, 7, 48
+"d:\YashEnterprisesPrototype\client\src\utils\preventNumberScroll.js", "JavaScript", 0, 0, 0, 11, 0, 0, 0, 4, 3, 18
+"d:\YashEnterprisesPrototype\client\vite.config.js", "JavaScript", 0, 0, 0, 5, 0, 0, 0, 1, 2, 8
+"Total", "-", 2842, 2, 9, 53, 8499, 6796, 13, 634, 2180, 21028

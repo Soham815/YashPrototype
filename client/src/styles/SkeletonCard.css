@@ -1,0 +1,150 @@
+/* ============================================
+   SKELETON CARD COMPONENT
+   ============================================ */
+
+.skeleton-card {
+	background: #fff;
+	border-radius: 16px;
+	overflow: hidden;
+	border: 2px solid #fae5d3;
+	filter: blur(4px);
+	opacity: 0.7;
+	animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 0.7;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+/* Product Skeleton */
+.skeleton-card--product {
+	display: grid;
+	grid-template-columns: 8rem 20rem 10rem 10rem 10rem 8rem 10rem 10rem 5rem;
+	align-items: center;
+	gap: 1.5rem;
+	padding: 1.5rem 2rem;
+	border-bottom: 2px solid #fae5d3;
+}
+
+/* Shared skeleton backgrounds */
+.skeleton-card__image {
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+.skeleton-card--product .skeleton-card__image {
+	width: 6rem;
+	height: 6rem;
+	border-radius: 8px;
+}
+
+.skeleton-card__content {
+	padding: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.skeleton-card__title {
+	width: 80%;
+	height: 2.4rem;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	border-radius: 4px;
+}
+
+.skeleton-card__title--short {
+	width: 60%;
+}
+
+.skeleton-card__text {
+	height: 1.6rem;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	border-radius: 4px;
+}
+
+.skeleton-card__text--short {
+	width: 40%;
+}
+
+.skeleton-card__text--medium {
+	width: 60%;
+}
+
+.skeleton-card__text--long {
+	width: 90%;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+/* Company Skeleton */
+.skeleton-card--company {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	padding: 2rem;
+	min-height: 10rem;
+}
+
+.skeleton-card__logo {
+	width: 6rem;
+	height: 6rem;
+	border-radius: 50%;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	flex-shrink: 0;
+}
+
+/* Offer Skeleton */
+.skeleton-card--offer {
+	padding: 2rem;
+	min-height: 12rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.skeleton-card__image {
+		height: 15rem;
+	}
+
+	.skeleton-card__content {
+		padding: 1.5rem;
+		gap: 1rem;
+	}
+
+	.skeleton-card__title {
+		height: 2rem;
+	}
+
+	.skeleton-card__text {
+		height: 1.4rem;
+	}
+
+	.skeleton-card--company {
+		padding: 1.5rem;
+		min-height: 8rem;
+	}
+
+	.skeleton-card__logo {
+		width: 5rem;
+		height: 5rem;
+	}
+}

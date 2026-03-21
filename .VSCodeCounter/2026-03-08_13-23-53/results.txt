@@ -1,0 +1,42 @@
+Date : 2026-03-08 13:23:53
+Directory : d:\YashEnterprisesPrototype\server
+Total : 12 files,  3409 codes, 145 comments, 354 blanks, all 3908 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |         10 |      1,952 |        145 |        352 |      2,449 |
+| JSON       |          2 |      1,457 |          0 |          2 |      1,459 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                              |         12 |      3,409 |        145 |        354 |      3,908 |
+| . (Files)                                                      |          2 |      1,457 |          0 |          2 |      1,459 |
+| src                                                            |         10 |      1,952 |        145 |        352 |      2,449 |
+| src (Files)                                                    |          1 |         45 |          5 |          9 |         59 |
+| src\config                                                     |          1 |          7 |          0 |          3 |         10 |
+| src\routes                                                     |          8 |      1,900 |        140 |        340 |      2,380 |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                       | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\YashEnterprisesPrototype\server\package-lock.json           | JSON       |      1,433 |          0 |          1 |      1,434 |
+| d:\YashEnterprisesPrototype\server\package.json                | JSON       |         24 |          0 |          1 |         25 |
+| d:\YashEnterprisesPrototype\server\src\config\supabase.js      | JavaScript |          7 |          0 |          3 |         10 |
+| d:\YashEnterprisesPrototype\server\src\routes\companies.js     | JavaScript |        199 |         27 |         49 |        275 |
+| d:\YashEnterprisesPrototype\server\src\routes\customers.js     | JavaScript |        120 |          9 |         20 |        149 |
+| d:\YashEnterprisesPrototype\server\src\routes\externalItems.js | JavaScript |        291 |         21 |         56 |        368 |
+| d:\YashEnterprisesPrototype\server\src\routes\freeStock.js     | JavaScript |        191 |          9 |         29 |        229 |
+| d:\YashEnterprisesPrototype\server\src\routes\offerPool.js     | JavaScript |        231 |         19 |         39 |        289 |
+| d:\YashEnterprisesPrototype\server\src\routes\offers.js        | JavaScript |        248 |         16 |         41 |        305 |
+| d:\YashEnterprisesPrototype\server\src\routes\products.js      | JavaScript |        308 |         23 |         56 |        387 |
+| d:\YashEnterprisesPrototype\server\src\routes\stock.js         | JavaScript |        312 |         16 |         50 |        378 |
+| d:\YashEnterprisesPrototype\server\src\server.js               | JavaScript |         45 |          5 |          9 |         59 |
+| Total                                                          |            |      3,409 |        145 |        354 |      3,908 |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+

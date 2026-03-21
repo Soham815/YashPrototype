@@ -84,9 +84,49 @@ router.post("/", upload.single("company_logo"), async (req, res) => {
 	}
 });
 
-// GET /api/companies - Get all companies
+// GET /api/companies - Get all companies (with pagination)
 router.get("/", async (req, res) => {
 	try {
+		const { limit, offset } = req.query;
+
+		// If pagination params provided, use them
+		if (limit && offset !== undefined) {
+			const limitNum = parseInt(limit);
+			const offsetNum = parseInt(offset);
+
+			// Get total count
+			const { count, error: countError } = await supabase
+				.from("companies")
+				.select("*", { count: "exact", head: true });
+
+			if (countError) {
+				return res.status(400).json({ error: countError.message });
+			}
+
+			// Get paginated data
+			const { data, error } = await supabase
+				.from("companies")
+				.select("*")
+				.order("company_name", { ascending: true })
+				.range(offsetNum, offsetNum + limitNum - 1);
+
+			if (error) {
+				return res.status(400).json({ error: error.message });
+			}
+
+			return res.json({
+				success: true,
+				data,
+				pagination: {
+					total: count,
+					limit: limitNum,
+					offset: offsetNum,
+					hasMore: offsetNum + limitNum < count,
+				},
+			});
+		}
+
+		// No pagination - return all (backward compatibility)
 		const { data, error } = await supabase
 			.from("companies")
 			.select("*")
@@ -199,71 +239,6 @@ router.put("/:id", upload.single("company_logo"), async (req, res) => {
 			success: true,
 			data: data[0],
 			message: "Company updated successfully",
-		});
-	} catch (error) {
-		console.error("Server error:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-});
-
-// DELETE /api/companies/:id - Delete company (requires PIN)
-router.delete("/:id", async (req, res) => {
-	try {
-		const { id } = req.params;
-		const { pin } = req.body; // Expect PIN in request body
-
-		// Verify PIN (you can store this in .env file)
-		const ADMIN_PIN = process.env.ADMIN_DELETE_PIN; // Default PIN
-
-		if (!pin) {
-			return res
-				.status(400)
-				.json({ error: "PIN is required to delete company" });
-		}
-
-		if (pin !== ADMIN_PIN) {
-			return res.status(403).json({ error: "Incorrect PIN. Access denied." });
-		}
-
-		// Get company data before deletion (for confirmation message)
-		const { data: companyData, error: fetchError } = await supabase
-			.from("companies")
-			.select("company_name")
-			.eq("id", id)
-			.single();
-
-		if (fetchError) {
-			console.error("Error fetching company:", fetchError);
-			return res.status(400).json({ error: fetchError.message });
-		}
-
-		if (!companyData) {
-			return res.status(404).json({ error: "Company not found" });
-		}
-
-		// Delete company from database (CASCADE will handle products & offers)
-		const { data, error } = await supabase
-			.from("companies")
-			.delete()
-			.eq("id", id)
-			.select();
-
-		if (error) {
-			console.error("Database error:", error);
-			return res.status(400).json({ error: error.message });
-		}
-
-		if (!data || data.length === 0) {
-			return res.status(404).json({ error: "Company not found" });
-		}
-
-		// Optionally delete company logo from storage
-		// You'd need to extract filename from data[0].company_logo URL
-		// and call supabase.storage.from('company-logos').remove([filename])
-
-		res.json({
-			success: true,
-			message: `Company "${companyData.company_name}" and all associated products/offers deleted successfully`,
 		});
 	} catch (error) {
 		console.error("Server error:", error);

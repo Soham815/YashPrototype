@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "./LazyImage";
 import { API_BASE_URL } from "../config/api";
 import "../styles/ViewCompanies.css";
 
@@ -207,10 +208,11 @@ function ViewCompanies() {
 									{/* Company Logo */}
 									<div className="company-logo-cell">
 										{company.company_logo ? (
-											<img
+											<LazyImage
 												src={company.company_logo}
 												alt={`${company.company_name} logo`}
 												className="company-logo"
+												strategy="lazy"
 											/>
 										) : (
 											<div className="company-logo-placeholder">

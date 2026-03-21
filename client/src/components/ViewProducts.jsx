@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import LazyImage from "./LazyImage";
 import { API_BASE_URL } from "../config/api";
 import "../styles/ViewProducts.css";
 
-function ViewProducts() {
-	const navigate = useNavigate();
+function ViewProducts({ onAddProduct, onEditProduct }) {
 	const [products, setProducts] = useState([]);
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -14,7 +13,6 @@ function ViewProducts() {
 	const [expandedProduct, setExpandedProduct] = useState(null);
 	const [selectedProductOffers, setSelectedProductOffers] = useState(null);
 	const [showOfferModal, setShowOfferModal] = useState(false);
-	const [deletingProductId, setDeletingProductId] = useState(null);
 
 	useEffect(() => {
 		fetchProducts();
@@ -23,6 +21,7 @@ function ViewProducts() {
 	useEffect(() => {
 		let filtered = [...products];
 
+		// Search filter
 		if (searchQuery.trim() !== "") {
 			filtered = filtered.filter(
 				(product) =>
@@ -35,6 +34,7 @@ function ViewProducts() {
 			);
 		}
 
+		// GST filter
 		if (sortBy !== "all") {
 			const gstValue = parseFloat(sortBy);
 			filtered = filtered.filter(
@@ -92,6 +92,7 @@ function ViewProducts() {
 			});
 
 			if (response.ok) {
+				// Update offers in modal
 				setSelectedProductOffers((prevOffers) =>
 					prevOffers.map((offer) =>
 						offer.id === offerId
@@ -100,6 +101,7 @@ function ViewProducts() {
 					),
 				);
 
+				// Refresh products to sync has_offer
 				await fetchProducts();
 
 				setMessage({
@@ -142,63 +144,12 @@ function ViewProducts() {
 		return details.length > 0 ? details.join(" | ") : "No details";
 	};
 
-	// ✅ Navigation handlers using React Router
-	const handleAddProduct = () => {
-		navigate("/admin/products/add");
-	};
-
-	const handleEditProduct = (productId) => {
-		navigate(`/admin/products/edit/${productId}`);
-	};
-
-	// ✅ Delete handler (unchanged)
-	const handleDelete = async (productId, productName) => {
-		const confirmed = window.confirm(
-			`Are you sure you want to delete "${productName}"?\n\n⚠️ This will also delete all offers associated with this product!`,
-		);
-
-		if (!confirmed) return;
-
-		try {
-			setDeletingProductId(productId);
-			const response = await fetch(`${API_BASE_URL}/products/${productId}`, {
-				method: "DELETE",
-			});
-
-			const data = await response.json();
-
-			if (response.ok) {
-				setMessage({
-					type: "success",
-					text: data.message || "Product deleted successfully!",
-				});
-				await fetchProducts();
-				setTimeout(() => setMessage({ type: "", text: "" }), 3000);
-			} else {
-				setMessage({
-					type: "error",
-					text: data.error || "Failed to delete product",
-				});
-				setTimeout(() => setMessage({ type: "", text: "" }), 5000);
-			}
-		} catch (error) {
-			console.error("Error deleting product:", error);
-			setMessage({
-				type: "error",
-				text: "Network error. Please try again.",
-			});
-			setTimeout(() => setMessage({ type: "", text: "" }), 5000);
-		} finally {
-			setDeletingProductId(null);
-		}
-	};
-
 	return (
 		<div className="view-products-page">
 			{/* Header */}
 			<div className="page-header">
 				<h2 className="page-heading">Manage Products</h2>
-				<button className="add-product-header-btn" onClick={handleAddProduct}>
+				<button className="add-product-header-btn" onClick={onAddProduct}>
 					<span className="btn-icon">+</span>
 					Add Product
 				</button>
@@ -259,10 +210,11 @@ function ViewProducts() {
 										<div className="product-image-cell">
 											{product.product_images &&
 											product.product_images.length > 0 ? (
-												<img
+												<LazyImage
 													src={product.product_images[0]}
 													alt={product.product_name}
 													className="product-image"
+													strategy="lazy"
 												/>
 											) : (
 												<div className="product-image-placeholder">
@@ -322,28 +274,16 @@ function ViewProducts() {
 											</button>
 										</div>
 
-										{/* Action Buttons */}
+										{/* Edit Button */}
 										<div className="product-action-cell">
 											<button
 												className="edit-btn"
 												onClick={(e) => {
 													e.stopPropagation();
-													handleEditProduct(product.id);
+													onEditProduct(product.id);
 												}}
 											>
 												Edit
-											</button>
-											<button
-												className="delete-btn"
-												onClick={(e) => {
-													e.stopPropagation();
-													handleDelete(product.id, product.product_name);
-												}}
-												disabled={deletingProductId === product.id}
-											>
-												{deletingProductId === product.id
-													? "Deleting..."
-													: "Delete"}
 											</button>
 										</div>
 
@@ -368,11 +308,12 @@ function ViewProducts() {
 															<h4 className="detail-heading">Product Images</h4>
 															<div className="product-images-grid">
 																{product.product_images.map((img, index) => (
-																	<img
+																	<LazyImage
 																		key={index}
 																		src={img}
 																		alt={`${product.product_name} ${index + 1}`}
 																		className="detail-image"
+																		strategy="lazy"
 																	/>
 																))}
 															</div>

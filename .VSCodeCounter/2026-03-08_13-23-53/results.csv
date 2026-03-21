@@ -1,0 +1,14 @@
+"filename", "language", "JSON", "JavaScript", "comment", "blank", "total"
+"d:\YashEnterprisesPrototype\server\package-lock.json", "JSON", 1433, 0, 0, 1, 1434
+"d:\YashEnterprisesPrototype\server\package.json", "JSON", 24, 0, 0, 1, 25
+"d:\YashEnterprisesPrototype\server\src\config\supabase.js", "JavaScript", 0, 7, 0, 3, 10
+"d:\YashEnterprisesPrototype\server\src\routes\companies.js", "JavaScript", 0, 199, 27, 49, 275
+"d:\YashEnterprisesPrototype\server\src\routes\customers.js", "JavaScript", 0, 120, 9, 20, 149
+"d:\YashEnterprisesPrototype\server\src\routes\externalItems.js", "JavaScript", 0, 291, 21, 56, 368
+"d:\YashEnterprisesPrototype\server\src\routes\freeStock.js", "JavaScript", 0, 191, 9, 29, 229
+"d:\YashEnterprisesPrototype\server\src\routes\offerPool.js", "JavaScript", 0, 231, 19, 39, 289
+"d:\YashEnterprisesPrototype\server\src\routes\offers.js", "JavaScript", 0, 248, 16, 41, 305
+"d:\YashEnterprisesPrototype\server\src\routes\products.js", "JavaScript", 0, 308, 23, 56, 387
+"d:\YashEnterprisesPrototype\server\src\routes\stock.js", "JavaScript", 0, 312, 16, 50, 378
+"d:\YashEnterprisesPrototype\server\src\server.js", "JavaScript", 0, 45, 5, 9, 59
+"Total", "-", 1457, 1952, 145, 354, 3908
