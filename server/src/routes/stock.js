@@ -39,6 +39,62 @@ router.get("/", async (req, res) => {
 	}
 });
 
+// GET /api/stock/history - Get all stock history
+// ⚠️ MUST be defined before /history/:productId — Express matches top-down,
+// so if /:productId came first, "history" would be captured as a productId param
+// and this route would never be reached.
+router.get("/history", async (req, res) => {
+	try {
+		const { data, error } = await supabase
+			.from("stock_history")
+			.select(
+				`
+        *,
+        products (
+          id,
+          product_name,
+          product_images,
+          companies (
+            company_name
+          )
+        )
+      `,
+			)
+			.order("created_at", { ascending: false });
+
+		if (error) {
+			return res.status(400).json({ error: error.message });
+		}
+
+		res.json({ success: true, data });
+	} catch (error) {
+		console.error("Server error:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+// GET /api/stock/history/:productId - Get history for specific product
+router.get("/history/:productId", async (req, res) => {
+	try {
+		const { productId } = req.params;
+
+		const { data, error } = await supabase
+			.from("stock_history")
+			.select("*")
+			.eq("product_id", productId)
+			.order("created_at", { ascending: false });
+
+		if (error) {
+			return res.status(400).json({ error: error.message });
+		}
+
+		res.json({ success: true, data });
+	} catch (error) {
+		console.error("Server error:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
 // GET /api/stock/product/:productId - Get stock for single product
 router.get("/product/:productId", async (req, res) => {
 	try {
@@ -275,59 +331,6 @@ router.put("/:productId/update", async (req, res) => {
 			data: updatedStock[0],
 			message: "Stock updated successfully",
 		});
-	} catch (error) {
-		console.error("Server error:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-});
-
-// GET /api/stock/history/:productId - Get history for specific product
-router.get("/history/:productId", async (req, res) => {
-	try {
-		const { productId } = req.params;
-
-		const { data, error } = await supabase
-			.from("stock_history")
-			.select("*")
-			.eq("product_id", productId)
-			.order("created_at", { ascending: false });
-
-		if (error) {
-			return res.status(400).json({ error: error.message });
-		}
-
-		res.json({ success: true, data });
-	} catch (error) {
-		console.error("Server error:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-});
-
-// GET /api/stock/history - Get all stock history
-router.get("/history", async (req, res) => {
-	try {
-		const { data, error } = await supabase
-			.from("stock_history")
-			.select(
-				`
-        *,
-        products (
-          id,
-          product_name,
-          product_images,
-          companies (
-            company_name
-          )
-        )
-      `,
-			)
-			.order("created_at", { ascending: false });
-
-		if (error) {
-			return res.status(400).json({ error: error.message });
-		}
-
-		res.json({ success: true, data });
 	} catch (error) {
 		console.error("Server error:", error);
 		res.status(500).json({ error: "Internal server error" });

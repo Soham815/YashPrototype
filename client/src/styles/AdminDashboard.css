@@ -33,7 +33,7 @@
 }
 
 /* ============================================
-   GRID LAYOUT - FIXED CLASS NAME
+   GRID LAYOUT
    ============================================ */
 
 .admin-cards {
@@ -63,7 +63,6 @@
 	border: 2px solid transparent;
 }
 
-/* Top border animation */
 .admin-card::before {
 	content: "";
 	position: absolute;
@@ -102,13 +101,8 @@
 }
 
 @keyframes float {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-10px);
-	}
+	0%, 100% { transform: translateY(0); }
+	50%       { transform: translateY(-10px); }
 }
 
 .admin-card__icon {
@@ -126,7 +120,6 @@
 .admin-card--companies .admin-card__icon-wrapper {
 	background: linear-gradient(135deg, #3498db, #2980b9);
 }
-
 .admin-card--companies::before {
 	background: linear-gradient(90deg, #3498db, #2980b9);
 }
@@ -135,16 +128,22 @@
 .admin-card--products .admin-card__icon-wrapper {
 	background: linear-gradient(135deg, #e67e22, #eb984e);
 }
-
 .admin-card--products::before {
 	background: linear-gradient(90deg, #e67e22, #eb984e);
+}
+
+/* Categories - Teal */
+.admin-card--categories .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+.admin-card--categories::before {
+	background: linear-gradient(90deg, #1abc9c, #16a085);
 }
 
 /* Offers - Purple */
 .admin-card--offers .admin-card__icon-wrapper {
 	background: linear-gradient(135deg, #9b59b6, #8e44ad);
 }
-
 .admin-card--offers::before {
 	background: linear-gradient(90deg, #9b59b6, #8e44ad);
 }
@@ -153,7 +152,6 @@
 .admin-card--stock .admin-card__icon-wrapper {
 	background: linear-gradient(135deg, #27ae60, #229954);
 }
-
 .admin-card--stock::before {
 	background: linear-gradient(90deg, #27ae60, #229954);
 }
@@ -162,13 +160,22 @@
 .admin-card--pool .admin-card__icon-wrapper {
 	background: linear-gradient(135deg, #9b59b6, #8e44ad);
 }
-
 .admin-card--pool::before {
 	background: linear-gradient(90deg, #9b59b6, #8e44ad);
 }
-
 .admin-card--pool {
 	border-color: #9b59b6;
+}
+
+/* External Items - Teal */
+.admin-card--external .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #1abc9c, #16a085);
+}
+.admin-card--external::before {
+	background: linear-gradient(90deg, #1abc9c, #16a085);
+}
+.admin-card--external {
+	border-color: #1abc9c;
 }
 
 /* ============================================
@@ -217,7 +224,6 @@
 	overflow: hidden;
 }
 
-/* Ripple effect on click */
 .admin-card__btn::before {
 	content: "";
 	position: absolute;
@@ -228,9 +234,7 @@
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.3);
 	transform: translate(-50%, -50%);
-	transition:
-		width 0.6s,
-		height 0.6s;
+	transition: width 0.6s, height 0.6s;
 }
 
 .admin-card__btn:hover::before {
@@ -244,7 +248,6 @@
 	color: #fff;
 	box-shadow: 0 0.5rem 1.5rem rgba(230, 126, 34, 0.3);
 }
-
 .admin-card__btn--primary:hover {
 	background: linear-gradient(135deg, #cf711f, #e67e22);
 	transform: translateY(-3px);
@@ -257,7 +260,6 @@
 	color: #e67e22;
 	border: 2px solid #e67e22;
 }
-
 .admin-card__btn--secondary:hover {
 	background: #e67e22;
 	color: #fff;
@@ -270,7 +272,6 @@
 	background: linear-gradient(135deg, #95a5a6, #7f8c8d);
 	color: #fff;
 }
-
 .admin-card__btn--tertiary:hover {
 	background: linear-gradient(135deg, #7f8c8d, #5d6d7e);
 	transform: translateY(-2px);
@@ -284,18 +285,6 @@
 	gap: 1.2rem;
 }
 
-/* External Items Card - Teal/Turquoise */
-.admin-card--external .admin-card__icon-wrapper {
-	background: linear-gradient(135deg, #1abc9c, #16a085);
-}
-
-.admin-card--external::before {
-	background: linear-gradient(90deg, #1abc9c, #16a085);
-}
-
-.admin-card--external {
-	border-color: #1abc9c;
-}
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
@@ -360,4 +349,12 @@
 	.admin-dashboard__title {
 		font-size: 3rem;
 	}
+}
+
+/* AI Vectoriser - Purple */
+.admin-card--vector .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+.admin-card--vector::before {
+	background: linear-gradient(90deg, #9b59b6, #8e44ad);
 }

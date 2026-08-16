@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import LazyImage from "./LazyImage";
 import { API_BASE_URL } from "../config/api";
 import "../styles/ViewProducts.css";
 
-function ViewProducts({ onAddProduct, onEditProduct }) {
+function ViewProducts() {
+	const navigate = useNavigate();
+
 	const [products, setProducts] = useState([]);
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [searchQuery, setSearchQuery] = useState("");
@@ -149,7 +152,10 @@ function ViewProducts({ onAddProduct, onEditProduct }) {
 			{/* Header */}
 			<div className="page-header">
 				<h2 className="page-heading">Manage Products</h2>
-				<button className="add-product-header-btn" onClick={onAddProduct}>
+				<button
+					className="add-product-header-btn"
+					onClick={() => navigate("/admin/products/add")}
+				>
 					<span className="btn-icon">+</span>
 					Add Product
 				</button>
@@ -280,7 +286,7 @@ function ViewProducts({ onAddProduct, onEditProduct }) {
 												className="edit-btn"
 												onClick={(e) => {
 													e.stopPropagation();
-													onEditProduct(product.id);
+													navigate(`/admin/products/edit/${product.id}`);
 												}}
 											>
 												Edit

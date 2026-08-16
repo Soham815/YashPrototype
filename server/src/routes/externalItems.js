@@ -108,6 +108,31 @@ router.get("/", async (req, res) => {
 	}
 });
 
+// GET /api/external-items/history/:id - Get history for specific item
+// ⚠️ MUST be defined before /:id — Express matches top-down, so if /:id
+// came first, the string "history" would be captured as the id param
+// and this route would never be reached.
+router.get("/history/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+
+		const { data, error } = await supabase
+			.from("external_item_stock_history")
+			.select("*")
+			.eq("external_item_id", id)
+			.order("created_at", { ascending: false });
+
+		if (error) {
+			return res.status(400).json({ error: error.message });
+		}
+
+		res.json({ success: true, data });
+	} catch (error) {
+		console.error("Server error:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
 // GET /api/external-items/:id - Get single external item
 router.get("/:id", async (req, res) => {
 	try {
@@ -292,28 +317,6 @@ router.put("/:id/update", async (req, res) => {
 			data: updatedItem[0],
 			message: "Stock updated successfully",
 		});
-	} catch (error) {
-		console.error("Server error:", error);
-		res.status(500).json({ error: "Internal server error" });
-	}
-});
-
-// GET /api/external-items/history/:id - Get history for specific item
-router.get("/history/:id", async (req, res) => {
-	try {
-		const { id } = req.params;
-
-		const { data, error } = await supabase
-			.from("external_item_stock_history")
-			.select("*")
-			.eq("external_item_id", id)
-			.order("created_at", { ascending: false });
-
-		if (error) {
-			return res.status(400).json({ error: error.message });
-		}
-
-		res.json({ success: true, data });
 	} catch (error) {
 		console.error("Server error:", error);
 		res.status(500).json({ error: "Internal server error" });
