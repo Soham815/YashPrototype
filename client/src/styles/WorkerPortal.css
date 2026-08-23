@@ -1,0 +1,442 @@
+/* ============================================================
+   WORKER PORTAL — full styles
+   ============================================================ */
+
+.worker-portal {
+  min-height: 100vh;
+  background: #fdf2e9;
+  padding-bottom: 6rem;
+}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+.worker-nav {
+  background: #2e1907;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 3rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+.worker-nav__brand { display: flex; align-items: center; gap: 1.2rem; }
+.worker-nav__icon  { font-size: 2.4rem; }
+.worker-nav__title { font-size: 2rem; font-weight: 700; color: #eb984e; }
+.worker-nav__right { display: flex; align-items: center; gap: 1.6rem; }
+.worker-nav__name  { font-size: 1.6rem; font-weight: 600; color: #fff; }
+.worker-nav__role  {
+  font-size: 1.2rem; color: #eb984e;
+  background: rgba(230,126,34,0.15);
+  padding: 0.3rem 1rem; border-radius: 2rem;
+  text-transform: capitalize;
+}
+.worker-nav__logout {
+  background: rgba(231,76,60,0.15);
+  border: 1.5px solid rgba(231,76,60,0.5);
+  color: #e74c3c; padding: 0.6rem 1.6rem;
+  font-size: 1.4rem; font-weight: 600;
+  border-radius: 6px; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+}
+.worker-nav__logout:hover { background: #e74c3c; color: #fff; }
+
+/* ── ACTION MSG ───────────────────────────────────────────── */
+.worker-action-msg {
+  background: #2e1907; color: #eb984e;
+  text-align: center; padding: 1.2rem;
+  font-size: 1.5rem; font-weight: 600;
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── STATS ────────────────────────────────────────────────── */
+.worker-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-bottom: 2px solid #fae5d3;
+  padding: 2rem 3rem;
+  gap: 1rem;
+}
+.worker-stat {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.4rem;
+}
+.worker-stat__num {
+  font-size: 3.2rem; font-weight: 700; color: #e67e22;
+}
+.worker-stat__label {
+  font-size: 1.2rem; color: #767676;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ── TABS ─────────────────────────────────────────────────── */
+.worker-tabs {
+  display: flex; background: #fff;
+  border-bottom: 2px solid #fae5d3;
+  padding: 0 2rem; overflow-x: auto;
+}
+.worker-tab {
+  padding: 1.4rem 2.2rem;
+  font-size: 1.5rem; font-weight: 600;
+  font-family: inherit; background: none;
+  border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; color: #767676;
+  white-space: nowrap; transition: all 0.2s;
+}
+.worker-tab:hover { color: #e67e22; }
+.worker-tab--active { color: #e67e22; border-bottom-color: #e67e22; }
+
+/* ── LIST ─────────────────────────────────────────────────── */
+.worker-list {
+  max-width: 72rem; margin: 2.4rem auto;
+  padding: 0 1.6rem;
+  display: flex; flex-direction: column; gap: 1.6rem;
+}
+.worker-empty {
+  text-align: center; font-size: 1.7rem;
+  color: #767676; padding: 5rem 2rem;
+}
+
+/* ── CARDS ────────────────────────────────────────────────── */
+.worker-card {
+  background: #fff;
+  border-radius: 1.4rem;
+  overflow: hidden;
+  box-shadow: 0 0.4rem 1.6rem rgba(23,13,3,0.08);
+  border-left: 6px solid #ccc;
+  transition: box-shadow 0.2s;
+}
+.worker-card:hover { box-shadow: 0 0.8rem 2.8rem rgba(23,13,3,0.14); }
+
+.worker-card--orange { border-left-color: #e67e22; }
+.worker-card--blue   { border-left-color: #3498db; }
+.worker-card--green  { border-left-color: #27ae60; }
+.worker-card--red    { border-left-color: #e74c3c; }
+.worker-card--purple { border-left-color: #9b59b6; }
+
+.worker-card__header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.6rem 2rem 0.6rem;
+}
+.worker-card__order-id {
+  font-size: 1.2rem; font-weight: 700;
+  color: #767676; display: block;
+}
+.worker-card__customer {
+  font-size: 1.9rem; font-weight: 700;
+  color: #2e1907; display: block; margin-top: 0.2rem;
+}
+.worker-card__addr {
+  font-size: 1.4rem; color: #555;
+  display: block; margin-top: 0.3rem;
+}
+.worker-card__right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 0.8rem;
+}
+.worker-card__amount {
+  font-size: 2.2rem; font-weight: 700; color: #e67e22;
+}
+.worker-card__pieces {
+  font-size: 1.3rem; color: #767676;
+}
+.worker-card__phone {
+  padding: 0.4rem 2rem 0.8rem;
+  font-size: 1.4rem; color: #555;
+}
+.worker-card__phone a { color: #e67e22; text-decoration: none; font-weight: 600; }
+
+/* Maps button */
+.worker-card__maps-btn {
+  background: #ebf5fb; border: 1.5px solid #3498db;
+  color: #2980b9; padding: 0.6rem 1.2rem;
+  font-size: 1.3rem; font-weight: 600;
+  border-radius: 6px; cursor: pointer;
+  font-family: inherit; transition: all 0.2s;
+  white-space: nowrap;
+}
+.worker-card__maps-btn:hover { background: #3498db; color: #fff; }
+.worker-card__maps-btn--inline {
+  display: block; margin: 0.4rem 2rem 0.8rem;
+}
+
+/* ── CHECKLIST ────────────────────────────────────────────── */
+.worker-checklist {
+  display: flex; flex-direction: column; gap: 0;
+  padding: 0.4rem 2rem 0.8rem;
+}
+.worker-checklist__item {
+  display: flex; align-items: center; gap: 1.4rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #fdf2e9;
+}
+.worker-checklist__item:hover { background: #fdf2e9; }
+.worker-checklist__item--done { background: #eafaf1 !important; }
+.worker-checklist__item--done .worker-checklist__name { text-decoration: line-through; color: #767676; }
+
+.worker-checklist__item input[type="checkbox"] {
+  width: 2.2rem; height: 2.2rem;
+  accent-color: #27ae60;
+  cursor: pointer; flex-shrink: 0;
+}
+.worker-checklist__name {
+  flex: 1; font-size: 1.6rem;
+  font-weight: 600; color: #2e1907;
+}
+.worker-checklist__qty {
+  font-size: 1.4rem; color: #e67e22;
+  font-weight: 700; white-space: nowrap;
+}
+
+/* Progress bar */
+.worker-card__progress {
+  display: flex; align-items: center; gap: 1.2rem;
+  padding: 0.4rem 2rem 1rem;
+}
+.worker-progress-bar {
+  flex: 1; height: 0.8rem;
+  background: #fae5d3; border-radius: 99px;
+  overflow: hidden;
+}
+.worker-progress-bar__fill {
+  height: 100%; background: linear-gradient(90deg, #e67e22, #27ae60);
+  border-radius: 99px; transition: width 0.3s;
+}
+.worker-progress-bar__label {
+  font-size: 1.3rem; font-weight: 700; color: #555;
+  white-space: nowrap;
+}
+
+/* ── PACKING SUMMARY TAGS (delivery view) ─────────────────── */
+.worker-packing-summary {
+  display: flex; flex-wrap: wrap; gap: 0.6rem;
+  padding: 0.6rem 2rem 0.8rem;
+}
+.worker-packing-tag {
+  background: #fdf2e9; color: #e67e22;
+  font-size: 1.3rem; font-weight: 600;
+  padding: 0.4rem 1rem; border-radius: 2rem;
+  border: 1px solid #eb984e;
+}
+
+/* ── ACTION BUTTONS ───────────────────────────────────────── */
+.worker-delivery-actions {
+  display: flex; gap: 1rem;
+  padding: 1rem 2rem 1.6rem;
+  flex-wrap: wrap;
+}
+.worker-card__action-btn {
+  flex: 1; padding: 1.3rem 1.6rem;
+  font-size: 1.5rem; font-weight: 700;
+  font-family: inherit; border: none;
+  border-radius: 0.9rem; cursor: pointer;
+  transition: all 0.2s; min-width: 16rem;
+  margin: 0.8rem 2rem 1.6rem;
+  display: block; width: calc(100% - 4rem);
+}
+.worker-delivery-actions .worker-card__action-btn {
+  margin: 0; width: auto; display: inline-block;
+}
+.worker-card__action-btn--green  { background: linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
+.worker-card__action-btn--green:hover  { background: linear-gradient(135deg,#1e8449,#27ae60); transform:translateY(-1px); }
+.worker-card__action-btn--blue   { background: linear-gradient(135deg,#2980b9,#3498db); color:#fff; }
+.worker-card__action-btn--blue:hover   { background: linear-gradient(135deg,#2471a3,#2980b9); transform:translateY(-1px); }
+.worker-card__action-btn--purple { background: linear-gradient(135deg,#8e44ad,#9b59b6); color:#fff; }
+.worker-card__action-btn--purple:hover { background: linear-gradient(135deg,#7d3c98,#8e44ad); transform:translateY(-1px); }
+.worker-card__action-btn--disabled {
+  background: #e0e0e0; color: #999; cursor: not-allowed;
+}
+
+/* ============================================================
+   PAYMENT MODAL
+   ============================================================ */
+.wp-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(23,13,3,0.7);
+  z-index: 1000;
+  display: flex; align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.wp-modal {
+  background: #fff;
+  border-radius: 2rem 2rem 0 0;
+  width: 100%; max-width: 56rem;
+  padding: 2.4rem 2.4rem 4rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.wp-modal__header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 2rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 2px solid #fae5d3;
+}
+.wp-modal__customer {
+  font-size: 2.2rem; font-weight: 700; color: #2e1907;
+}
+.wp-modal__due {
+  font-size: 1.6rem; color: #555; margin-top: 0.4rem;
+}
+.wp-modal__due strong { color: #e67e22; font-size: 1.8rem; }
+.wp-modal__sub { font-size: 1.4rem; color: #767676; margin-top: 0.2rem; }
+
+.wp-modal__close {
+  background: #fdf2e9; border: none;
+  font-size: 1.8rem; width: 3.6rem; height: 3.6rem;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #555; transition: all 0.2s; flex-shrink: 0;
+}
+.wp-modal__close:hover { background: #e74c3c; color: #fff; }
+
+.wp-modal__section { margin-top: 0.4rem; }
+.wp-modal__label {
+  font-size: 1.5rem; font-weight: 700;
+  color: #2e1907; margin-bottom: 1.4rem;
+}
+
+/* Mode buttons */
+.wp-mode-btns {
+  display: flex; flex-direction: column; gap: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+.wp-mode-btn {
+  padding: 1.6rem 2rem;
+  font-size: 1.8rem; font-weight: 700;
+  font-family: inherit; border: none;
+  border-radius: 1rem; cursor: pointer;
+  transition: all 0.2s; text-align: left;
+}
+.wp-mode-btn--cash  { background: #fdf2e9; color: #2e1907; border: 2px solid #fae5d3; }
+.wp-mode-btn--cash:hover  { border-color: #e67e22; background: #fae5d3; }
+.wp-mode-btn--upi   { background: #ebf5fb; color: #2980b9; border: 2px solid #aed6f1; }
+.wp-mode-btn--upi:hover   { border-color: #3498db; background: #d6eaf8; }
+.wp-mode-btn--later { background: #fef9e7; color: #d4ac0d; border: 2px solid #f9e79f; }
+.wp-mode-btn--later:hover { border-color: #f1c40f; background: #fef3cd; }
+
+/* Amount input */
+.wp-modal__input {
+  width: 100%; padding: 1.6rem;
+  font-size: 2.4rem; font-weight: 700;
+  font-family: inherit;
+  border: 2px solid #fae5d3; border-radius: 1rem;
+  background: #fdf2e9; color: #2e1907;
+  margin-bottom: 1rem; transition: border-color 0.2s;
+  text-align: center;
+}
+.wp-modal__input:focus { outline: none; border-color: #e67e22; background: #fff; }
+
+.wp-modal__overpay {
+  font-size: 1.4rem; color: #27ae60;
+  font-weight: 600; margin-bottom: 1rem;
+  padding: 0.8rem 1.2rem;
+  background: #eafaf1; border-radius: 0.6rem;
+}
+.wp-modal__partial {
+  font-size: 1.4rem; color: #e67e22;
+  font-weight: 600; margin-bottom: 1rem;
+  padding: 0.8rem 1.2rem;
+  background: #fdf2e9; border-radius: 0.6rem;
+}
+
+/* UPI QR */
+.wp-qr-wrap {
+  display: flex; justify-content: center;
+  margin: 1.2rem 0;
+}
+.wp-qr {
+  width: 22rem; height: 22rem;
+  border-radius: 1.2rem;
+  border: 4px solid #fae5d3;
+  box-shadow: 0 0.8rem 2rem rgba(23,13,3,0.12);
+}
+.wp-qr-amount {
+  text-align: center; font-size: 2rem;
+  font-weight: 700; color: #2e1907; margin: 0.8rem 0 0.4rem;
+}
+.wp-qr-hint {
+  text-align: center; font-size: 1.4rem;
+  color: #767676; margin-bottom: 1.6rem;
+}
+
+/* Confirm checkbox */
+.wp-confirm-check {
+  display: flex; align-items: center; gap: 1.2rem;
+  font-size: 1.5rem; font-weight: 600; color: #2e1907;
+  margin: 1.2rem 0; cursor: pointer;
+}
+.wp-confirm-check input[type="checkbox"] {
+  width: 2rem; height: 2rem;
+  accent-color: #27ae60; cursor: pointer;
+}
+
+/* Modal action row */
+.wp-modal__actions {
+  display: flex; gap: 1.2rem; margin-top: 1.6rem;
+}
+.wp-modal__back {
+  padding: 1.3rem 2rem; font-size: 1.5rem;
+  font-weight: 600; font-family: inherit;
+  background: #fdf2e9; color: #555;
+  border: 2px solid #fae5d3; border-radius: 0.9rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.wp-modal__back:hover { border-color: #e67e22; color: #e67e22; }
+
+.wp-modal__confirm {
+  flex: 1; padding: 1.3rem 2rem;
+  font-size: 1.5rem; font-weight: 700;
+  font-family: inherit; border: none;
+  border-radius: 0.9rem; cursor: pointer;
+  transition: all 0.2s;
+}
+.wp-modal__confirm--green  { background: linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
+.wp-modal__confirm--green:hover:not(:disabled)  { background: linear-gradient(135deg,#1e8449,#27ae60); }
+.wp-modal__confirm--blue   { background: linear-gradient(135deg,#2980b9,#3498db); color:#fff; }
+.wp-modal__confirm--blue:hover:not(:disabled)   { background: linear-gradient(135deg,#2471a3,#2980b9); }
+.wp-modal__confirm--orange { background: linear-gradient(135deg,#e67e22,#eb984e); color:#fff; }
+.wp-modal__confirm--orange:hover:not(:disabled) { background: linear-gradient(135deg,#cf711f,#e67e22); }
+.wp-modal__confirm:disabled { background: #ccc; cursor: not-allowed; }
+
+.wp-modal__msg {
+  margin-top: 1.2rem; font-size: 1.4rem;
+  font-weight: 600; color: #e74c3c;
+  text-align: center;
+}
+
+/* Auth card badge */
+.auth-card__badge {
+  font-size: 3rem; text-align: center; margin-bottom: 0.8rem;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .worker-nav   { padding: 1.2rem 1.6rem; }
+  .worker-nav__title { font-size: 1.7rem; }
+  .worker-stats { grid-template-columns: repeat(2,1fr); padding: 1.6rem; }
+  .worker-stat__num { font-size: 2.6rem; }
+  .worker-tabs  { padding: 0 0.8rem; }
+  .worker-tab   { padding: 1.2rem 1.6rem; font-size: 1.4rem; }
+  .worker-list  { padding: 0 1rem; }
+  .worker-delivery-actions { flex-direction: column; }
+  .wp-modal { padding: 2rem 1.6rem 4rem; }
+  .wp-qr { width: 18rem; height: 18rem; }
+}

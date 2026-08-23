@@ -1,146 +1,183 @@
 const express = require("express");
 const supabase = require("../config/supabase");
+const router  = express.Router();
 
-const router = express.Router();
-
-// POST /api/customers - Register new customer
-router.post("/", async (req, res) => {
+// ── POST /api/customers/signup ──────────────────────────────
+router.post("/signup", async (req, res) => {
 	try {
 		const {
 			customer_name,
 			business_name,
 			contact_number,
+			email,
 			street_address,
+			city,
 			latitude,
 			longitude,
 			gst_number,
 			food_licence_number,
-			email,
+			password,
 		} = req.body;
 
-		// Validation
-		if (
-			!customer_name ||
-			!business_name ||
-			!contact_number ||
-			!street_address ||
-			!latitude ||
-			!longitude ||
-			!gst_number ||
-			!food_licence_number
-		) {
-			return res.status(400).json({ error: "All fields are required" });
+		if (!customer_name || !contact_number || !password)
+			return res.status(400).json({ error: "Name, contact number and password are required" });
+
+		// Check contact_number not already registered
+		const { data: existing } = await supabase
+			.from("customers")
+			.select("id")
+			.eq("contact_number", contact_number)
+			.single();
+
+		if (existing)
+			return res.status(400).json({ error: "Contact number already registered" });
+
+		// Check GST uniqueness if provided
+		if (gst_number) {
+			const { data: gstExists } = await supabase
+				.from("customers")
+				.select("id")
+				.eq("gst_number", gst_number)
+				.single();
+			if (gstExists)
+				return res.status(400).json({ error: "GST number already registered" });
 		}
 
-		// Validate GST format (basic validation)
-		const gstRegex =
-			/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-		if (!gstRegex.test(gst_number)) {
-			return res.status(400).json({ error: "Invalid GST number format" });
+		// Check food licence uniqueness if provided
+		if (food_licence_number) {
+			const { data: licExists } = await supabase
+				.from("customers")
+				.select("id")
+				.eq("food_licence_number", food_licence_number)
+				.single();
+			if (licExists)
+				return res.status(400).json({ error: "Food licence number already registered" });
 		}
 
-		// Validate phone number (Indian format)
-		const phoneRegex = /^[6-9]\d{9}$/;
-		if (!phoneRegex.test(contact_number.replace(/[^0-9]/g, ""))) {
-			return res
-				.status(400)
-				.json({ error: "Invalid contact number (10 digits required)" });
+		// Hash password via pgcrypto RPC
+		let password_hash = password;
+		try {
+			const { data: hashResult } = await supabase
+				.rpc("hash_password", { plain: password });
+			if (hashResult) password_hash = hashResult;
+		} catch (e) {
+			console.warn("hash_password RPC not available, storing plain (dev only)");
 		}
 
-		// Insert customer
+		const insertData = {
+			customer_name,
+			contact_number,
+			password_hash,
+			business_name:       business_name       || null,
+			email:               email               || null,
+			street_address:      street_address      || null,
+			city:                city                || null,
+			gst_number:          gst_number          || null,
+			food_licence_number: food_licence_number || null,
+			is_active:           true,
+		};
+
+		// Add coordinates if provided
+		if (latitude && longitude) {
+			insertData.latitude  = parseFloat(latitude);
+			insertData.longitude = parseFloat(longitude);
+		}
+
 		const { data, error } = await supabase
 			.from("customers")
-			.insert([
-				{
-					customer_name: customer_name.trim(),
-					business_name: business_name.trim(),
-					contact_number: contact_number.trim(),
-					street_address: street_address.trim(),
-					latitude: parseFloat(latitude),
-					longitude: parseFloat(longitude),
-					gst_number: gst_number.trim().toUpperCase(),
-					food_licence_number: food_licence_number.trim().toUpperCase(),
-					email: email ? email.trim().toLowerCase() : null,
-				},
-			])
-			.select();
+			.insert([insertData])
+			.select("id, customer_name, business_name, contact_number, email, street_address, city, gst_number, food_licence_number, latitude, longitude, is_active, created_at")
+			.single();
 
-		if (error) {
-			console.error("Database error:", error);
+		if (error) return res.status(400).json({ error: error.message });
 
-			// Handle unique constraint violations
-			if (error.code === "23505") {
-				if (error.message.includes("gst_number")) {
-					return res
-						.status(400)
-						.json({ error: "GST number already registered" });
-				}
-				if (error.message.includes("food_licence_number")) {
-					return res
-						.status(400)
-						.json({ error: "Food licence number already registered" });
-				}
-				if (error.message.includes("email")) {
-					return res.status(400).json({ error: "Email already registered" });
-				}
-			}
-
-			return res.status(400).json({ error: error.message });
-		}
+		// Auto-create finance account
+		await supabase
+			.from("finance_accounts")
+			.insert([{ customer_id: data.id }]);
 
 		res.status(201).json({
 			success: true,
-			data: data[0],
-			message: "Customer registered successfully!",
+			data:    data,
+			message: "Account created successfully",
 		});
-	} catch (error) {
-		console.error("Server error:", error);
+	} catch (e) {
+		console.error(e);
 		res.status(500).json({ error: "Internal server error" });
 	}
 });
 
-// GET /api/customers - Get all customers
+// ── POST /api/customers/login ──────────────────────────────
+router.post("/login", async (req, res) => {
+	try {
+		const { contact_number, password } = req.body;
+
+		if (!contact_number || !password)
+			return res.status(400).json({ error: "Contact number and password are required" });
+
+		const { data: customer, error } = await supabase
+			.from("customers")
+			.select("id, customer_name, business_name, contact_number, email, street_address, city, gst_number, food_licence_number, latitude, longitude, is_active, password_hash, created_at")
+			.eq("contact_number", contact_number)
+			.single();
+
+		if (error || !customer)
+			return res.status(401).json({ error: "Invalid contact number or password" });
+
+		if (!customer.is_active)
+			return res.status(403).json({ error: "Account is inactive. Contact support." });
+
+		// Verify password
+		let passwordValid = false;
+		try {
+			const { data: valid } = await supabase
+				.rpc("verify_password", { plain: password, hashed: customer.password_hash });
+			passwordValid = valid;
+		} catch (e) {
+			// Dev fallback
+			passwordValid = password === customer.password_hash;
+		}
+
+		if (!passwordValid)
+			return res.status(401).json({ error: "Invalid contact number or password" });
+
+		const { password_hash, ...safeCustomer } = customer;
+
+		res.json({ success: true, data: safeCustomer });
+	} catch (e) {
+		console.error(e);
+		res.status(500).json({ error: "Internal server error" });
+	}
+});
+
+// ── GET /api/customers (admin — all) ───────────────────────
 router.get("/", async (req, res) => {
 	try {
 		const { data, error } = await supabase
 			.from("customers")
-			.select("*")
+			.select("id, customer_name, business_name, contact_number, email, street_address, city, gst_number, food_licence_number, latitude, longitude, is_active, created_at")
 			.order("created_at", { ascending: false });
 
-		if (error) {
-			return res.status(400).json({ error: error.message });
-		}
-
+		if (error) return res.status(400).json({ error: error.message });
 		res.json({ success: true, data });
-	} catch (error) {
-		console.error("Server error:", error);
+	} catch (e) {
 		res.status(500).json({ error: "Internal server error" });
 	}
 });
 
-// GET /api/customers/nearby - Get customers within radius
-router.get("/nearby", async (req, res) => {
+// ── GET /api/customers/:id ──────────────────────────────────
+router.get("/:id", async (req, res) => {
 	try {
-		const { latitude, longitude, radius = 5000 } = req.query; // radius in meters
+		const { id } = req.params;
+		const { data, error } = await supabase
+			.from("customers")
+			.select("id, customer_name, business_name, contact_number, email, street_address, city, gst_number, food_licence_number, latitude, longitude, is_active, created_at")
+			.eq("id", id)
+			.single();
 
-		if (!latitude || !longitude) {
-			return res.status(400).json({ error: "Latitude and longitude required" });
-		}
-
-		// Using PostGIS for geospatial query
-		const { data, error } = await supabase.rpc("get_nearby_customers", {
-			user_lat: parseFloat(latitude),
-			user_lng: parseFloat(longitude),
-			radius_meters: parseInt(radius),
-		});
-
-		if (error) {
-			return res.status(400).json({ error: error.message });
-		}
-
+		if (error || !data) return res.status(404).json({ error: "Customer not found" });
 		res.json({ success: true, data });
-	} catch (error) {
-		console.error("Server error:", error);
+	} catch (e) {
 		res.status(500).json({ error: "Internal server error" });
 	}
 });

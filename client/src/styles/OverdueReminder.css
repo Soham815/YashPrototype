@@ -1,0 +1,69 @@
+.overdue-reminder {
+	background: linear-gradient(135deg, #c0392b, #e74c3c);
+	color: #fff;
+	padding: 1.2rem 3rem;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	box-shadow: 0 0.5rem 2rem rgba(0,0,0,0.2);
+}
+
+.overdue-reminder__content {
+	display: flex;
+	align-items: center;
+	gap: 1.6rem;
+	max-width: 120rem;
+	margin: 0 auto;
+}
+
+.overdue-reminder__icon {
+	display: block;
+	height: 2.4rem;
+	width: 2.4rem;
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.overdue-reminder__text {
+	flex: 1;
+	font-size: 1.5rem;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+.overdue-reminder__text strong { font-weight: 700; }
+
+.overdue-reminder__btn {
+	padding: 0.7rem 1.8rem;
+	font-size: 1.4rem;
+	font-weight: 600;
+	background: #fff;
+	color: #c0392b;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-family: inherit;
+	transition: all 0.2s;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+.overdue-reminder__btn:hover { background: #fdf2e9; transform: translateY(-1px); }
+
+.overdue-reminder__close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.2rem;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.overdue-reminder__close-icon {
+	display: block;
+	height: 2.2rem;
+	width: 2.2rem;
+	color: rgba(255,255,255,0.7);
+	transition: color 0.2s;
+}
+.overdue-reminder__close:hover .overdue-reminder__close-icon { color: #fff; }

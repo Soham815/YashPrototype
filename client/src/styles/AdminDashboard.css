@@ -358,3 +358,27 @@
 .admin-card--vector::before {
 	background: linear-gradient(90deg, #9b59b6, #8e44ad);
 }
+
+/* Orders - Indigo */
+.admin-card--orders .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #5c6bc0, #3949ab);
+}
+.admin-card--orders::before {
+	background: linear-gradient(90deg, #5c6bc0, #3949ab);
+}
+
+/* Finance - Green */
+.admin-card--finance .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+.admin-card--finance::before {
+	background: linear-gradient(90deg, #27ae60, #2ecc71);
+}
+
+/* Preorders - Blue */
+.admin-card--preorders .admin-card__icon-wrapper {
+	background: linear-gradient(135deg, #3498db, #2980b9);
+}
+.admin-card--preorders::before {
+	background: linear-gradient(90deg, #3498db, #2980b9);
+}

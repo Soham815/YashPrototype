@@ -1,8 +1,8 @@
 const express = require("express");
-const cors = require("cors");
+const cors    = require("cors");
 require("dotenv").config();
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 5000;
 
 const companiesRouter     = require("./routes/companies");
@@ -15,6 +15,11 @@ const offerPoolRouter     = require("./routes/offerPool");
 const externalItemsRouter = require("./routes/externalItems");
 const categoriesRouter    = require("./routes/categories");
 const vectorsRouter       = require("./routes/vectors");
+const ordersRouter        = require("./routes/orders");
+const { router: preordersRouter } = require("./routes/preorders");
+const financeRouter       = require('./routes/finance');
+const workersRouter       = require('./routes/workers');
+const deliveriesRouter    = require('./routes/deliveries');
 
 app.use(cors({
 	origin: [
@@ -26,7 +31,7 @@ app.use(cors({
 		"http://www.simplywebdev.io",
 	],
 	credentials: true,
-	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	methods: ["GET","POST","PUT","DELETE","OPTIONS"],
 }));
 
 app.use(express.json());
@@ -41,8 +46,13 @@ app.use("/api/offer-pool",     offerPoolRouter);
 app.use("/api/external-items", externalItemsRouter);
 app.use("/api/categories",     categoriesRouter);
 app.use("/api/vectors",        vectorsRouter);
+app.use("/api/orders",         ordersRouter);
+app.use("/api/preorders",      preordersRouter);
+app.use('/api/finance',        financeRouter);
+app.use('/api/workers',       workersRouter);
+app.use('/api/deliveries',    deliveriesRouter);
 
 app.get("/api/test", (req, res) => res.json({ message: "Backend is working!" }));
-app.get("/health",  (req, res) => res.json({ status: "OK", timestamp: new Date().toISOString() }));
+app.get("/health",   (req, res) => res.json({ status: "OK", timestamp: new Date().toISOString() }));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

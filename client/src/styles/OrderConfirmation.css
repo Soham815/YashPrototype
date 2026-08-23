@@ -1,0 +1,137 @@
+.confirm-page {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #fdf2e9 0%, #fae5d3 100%);
+}
+
+.confirm-page .nav {
+	display: flex;
+	background-color: #2e1907;
+	height: 10vh;
+	align-items: center;
+	padding: 1rem 3rem;
+}
+
+.confirm-page .nav__logo { height: 5.15rem; width: auto; cursor: pointer; }
+
+.confirm-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: calc(100vh - 10vh);
+	padding: 4rem 2rem;
+}
+
+.confirm-card {
+	background: #fff;
+	border-radius: 2rem;
+	padding: 6rem 5rem;
+	max-width: 60rem;
+	width: 100%;
+	text-align: center;
+	box-shadow: 0 2rem 6rem rgba(23, 13, 3, 0.15);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2.5rem;
+}
+
+.confirm-card__icon {
+	font-size: 8rem;
+	animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+	0%   { transform: scale(0); opacity: 0; }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+.confirm-card__title {
+	font-size: 4.5rem;
+	font-weight: 700;
+	color: #2e1907;
+}
+
+.confirm-card__subtitle {
+	font-size: 2rem;
+	color: #555;
+	line-height: 1.6;
+}
+
+.confirm-card__order-id {
+	background: #fdf2e9;
+	border: 2px solid #eb984e;
+	border-radius: 1rem;
+	padding: 1rem 3rem;
+	font-size: 2rem;
+	font-weight: 700;
+	color: #e67e22;
+	letter-spacing: 1px;
+}
+
+.confirm-card__amount {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	background: linear-gradient(135deg, #fdf2e9, #fae5d3);
+	border-radius: 1.2rem;
+	padding: 2rem 5rem;
+	width: 100%;
+}
+
+.confirm-card__amount__label {
+	font-size: 1.6rem;
+	color: #767676;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.confirm-card__amount__value {
+	font-size: 5rem;
+	font-weight: 700;
+	color: #2e1907;
+}
+
+.confirm-card__info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
+}
+
+.confirm-card__info p {
+	font-size: 1.6rem;
+	color: #767676;
+}
+
+.confirm-card__actions {
+	display: flex;
+	gap: 2rem;
+	width: 100%;
+}
+
+.confirm-card__btn {
+	flex: 1;
+	padding: 1.6rem;
+	font-size: 1.8rem;
+}
+
+.confirm-card__btn--primary {
+	background: linear-gradient(135deg, #e67e22, #eb984e);
+	color: #45260a;
+}
+
+.confirm-card__btn--secondary {
+	background: transparent;
+	color: #e67e22;
+	border: 2px solid #e67e22 !important;
+}
+
+.confirm-card__btn--secondary:hover {
+	background: #e67e22;
+	color: #fff;
+}
+
+@media (max-width: 600px) {
+	.confirm-card { padding: 4rem 2rem; }
+	.confirm-card__actions { flex-direction: column; }
+}

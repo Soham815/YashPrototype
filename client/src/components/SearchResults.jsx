@@ -5,6 +5,7 @@ import { useSearch, highlightMatch } from "../hooks/useSearch";
 import { useCart } from "../context/CartContext";
 import { toTitleCase } from "../utils/textUtils";
 import "../styles/SearchResults.css";
+import OverdueReminder from "./OverdueReminder";
 
 function SearchResults() {
 	const [searchParams] = useSearchParams();

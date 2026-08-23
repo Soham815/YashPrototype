@@ -13,6 +13,34 @@ function AdminDashboard() {
 
 			<div className="admin-cards">
 
+				{/* Finance */}
+				<div className="admin-card admin-card--finance">
+					<div className="admin-card__icon-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" className="admin-card__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+					</div>
+					<h2 className="admin-card__title">Finance</h2>
+					<p className="admin-card__description">Customer credit accounts, payments and ledger</p>
+					<div className="admin-card__actions">
+						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/finance")}>View Finance</button>
+					</div>
+				</div>
+
+				{/* Orders */}
+				<div className="admin-card admin-card--orders">
+					<div className="admin-card__icon-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" className="admin-card__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+						</svg>
+					</div>
+					<h2 className="admin-card__title">Orders</h2>
+					<p className="admin-card__description">View and manage all customer orders</p>
+					<div className="admin-card__actions">
+						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/orders")}>View Orders</button>
+					</div>
+				</div>
+
 				{/* Companies */}
 				<div className="admin-card admin-card--companies">
 					<div className="admin-card__icon-wrapper">
@@ -116,6 +144,20 @@ function AdminDashboard() {
 					</div>
 				</div>
 
+				{/* Preorder Queue */}
+				<div className="admin-card admin-card--preorders">
+					<div className="admin-card__icon-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" className="admin-card__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+					</div>
+					<h2 className="admin-card__title">Preorder Queue</h2>
+					<p className="admin-card__description">Manage customer preorders and auto-fulfillment queue</p>
+					<div className="admin-card__actions">
+						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/preorders")}>View Queue</button>
+					</div>
+				</div>
+
 				{/* External Items */}
 				<div className="admin-card admin-card--external">
 					<div className="admin-card__icon-wrapper">
@@ -127,6 +169,34 @@ function AdminDashboard() {
 					<p className="admin-card__description">Manage non-inventory promotional items</p>
 					<div className="admin-card__actions">
 						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/external-items")}>🏷️ Manage Items</button>
+					</div>
+				</div>
+
+				{/* Workers */}
+				<div className="admin-card admin-card--workers">
+					<div className="admin-card__icon-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" className="admin-card__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+						</svg>
+					</div>
+					<h2 className="admin-card__title">Workers</h2>
+					<p className="admin-card__description">Manage delivery and packaging staff accounts</p>
+					<div className="admin-card__actions">
+						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/workers")}>Manage Workers</button>
+					</div>
+				</div>
+
+				{/* Deliveries */}
+				<div className="admin-card admin-card--deliveries">
+					<div className="admin-card__icon-wrapper">
+						<svg xmlns="http://www.w3.org/2000/svg" className="admin-card__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+						</svg>
+					</div>
+					<h2 className="admin-card__title">Deliveries</h2>
+					<p className="admin-card__description">Assign orders for packaging and delivery, track status</p>
+					<div className="admin-card__actions">
+						<button className="admin-card__btn admin-card__btn--primary" onClick={() => navigate("/admin/deliveries")}>Manage Deliveries</button>
 					</div>
 				</div>
 

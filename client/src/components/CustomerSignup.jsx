@@ -1,526 +1,403 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-import "leaflet/dist/leaflet.css";
-import "leaflet-geosearch/dist/geosearch.css";
-import L from "leaflet";
+import { useAuth } from "../context/AuthContext";
 import "../styles/CustomerSignup.css";
 
-// Fix for default marker icons in React-Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-	iconRetinaUrl:
-		"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-	iconUrl:
-		"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-	shadowUrl:
-		"https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+export default function CustomerSignup() {
+	const navigate   = useNavigate();
+	const { login }  = useAuth();
+	const mapRef     = useRef(null);
+	const leafletMap = useRef(null);
+	const markerRef  = useRef(null);
 
-// Component to handle map clicks
-function LocationMarker({ position, setPosition }) {
-	const map = useMap();
-
-	useEffect(() => {
-		if (position) {
-			map.flyTo(position, 16);
-		}
-	}, [position, map]);
-
-	useEffect(() => {
-		const onClick = (e) => {
-			setPosition(e.latlng);
-		};
-
-		map.on("click", onClick);
-
-		return () => {
-			map.off("click", onClick);
-		};
-	}, [map, setPosition]);
-
-	return position === null ? null : <Marker position={position} />;
-}
-
-function CustomerSignup() {
-	const [formData, setFormData] = useState({
-		customer_name: "",
-		business_name: "",
-		contact_number: "",
-		street_address: "",
-		gst_number: "",
+	const [form, setForm] = useState({
+		customer_name:       "",
+		business_name:       "",
+		contact_number:      "",
+		email:               "",
+		street_address:      "",
+		city:                "",
+		gst_number:          "",
 		food_licence_number: "",
-		email: "",
+		latitude:            "",
+		longitude:           "",
+		password:            "",
+		confirmPassword:     "",
 	});
 
-	const [mapPosition, setMapPosition] = useState(null);
-	const [mapCenter, setMapCenter] = useState([18.5204, 73.8567]); // Default: Pune
-	const [loading, setLoading] = useState(false);
-	const [message, setMessage] = useState({ type: "", text: "" });
-	const [showMap, setShowMap] = useState(false);
+	const [error,          setError]          = useState("");
+	const [loading,        setLoading]        = useState(false);
+	const [mapReady,       setMapReady]       = useState(false);
+	const [locationMsg,    setLocationMsg]    = useState("");
+	const [landmarkQuery,  setLandmarkQuery]  = useState("");
+	const [landmarkResults,setLandmarkResults]= useState([]);
+	const [searchLoading,  setSearchLoading]  = useState(false);
 
-	// Search functionality
-	const [searchQuery, setSearchQuery] = useState("");
-	const [searchResults, setSearchResults] = useState([]);
-	const [searching, setSearching] = useState(false);
-	const [showResults, setShowResults] = useState(false);
-
-	const searchProvider = useRef(new OpenStreetMapProvider());
-
-	// Get user's current location
+	/* ── Load Leaflet from CDN ─────────────────────────────────── */
 	useEffect(() => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					const { latitude, longitude } = position.coords;
-					setMapCenter([latitude, longitude]);
-					setMapPosition({ lat: latitude, lng: longitude });
-				},
-				(error) => {
-					console.log("Location access denied, using default location");
-				},
-			);
+		if (!document.getElementById("leaflet-css")) {
+			const link  = document.createElement("link");
+			link.id     = "leaflet-css";
+			link.rel    = "stylesheet";
+			link.href   = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+			document.head.appendChild(link);
+		}
+		if (!window.L) {
+			const script  = document.createElement("script");
+			script.src    = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+			script.onload = () => setMapReady(true);
+			document.head.appendChild(script);
+		} else {
+			setMapReady(true);
 		}
 	}, []);
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData({
-			...formData,
-			[name]: value,
+	/* ── Build orange pin icon ─────────────────────────────────── */
+	const buildIcon = (L) =>
+		L.divIcon({
+			className: "",
+			html: `<div style="
+				width:28px;height:28px;background:#e67e22;
+				border:3px solid #fff;border-radius:50% 50% 50% 0;
+				transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,0.35);
+			"></div>`,
+			iconSize:   [28, 28],
+			iconAnchor: [14, 28],
 		});
-	};
 
-	const handleContactChange = (e) => {
-		const value = e.target.value.replace(/[^0-9]/g, "");
-		if (value.length <= 10) {
-			setFormData({
-				...formData,
-				contact_number: value,
-			});
-		}
-	};
-
-	const handleGSTChange = (e) => {
-		const value = e.target.value.toUpperCase();
-		if (value.length <= 15) {
-			setFormData({
-				...formData,
-				gst_number: value,
-			});
-		}
-	};
-
-	// Handle search input
-	const handleSearchChange = (e) => {
-		setSearchQuery(e.target.value);
-	};
-
-	// Perform search - FIXED: No form submission
-	const handleSearch = async () => {
-		if (!searchQuery.trim()) return;
-
-		setSearching(true);
-		setShowResults(false);
-
-		try {
-			const results = await searchProvider.current.search({
-				query: searchQuery,
-			});
-
-			setSearchResults(results);
-			setShowResults(true);
-
-			// If only one result, auto-select it
-			if (results.length === 1) {
-				handleSelectResult(results[0]);
-			}
-		} catch (error) {
-			console.error("Search error:", error);
-			setMessage({
-				type: "error",
-				text: "Search failed. Please try again.",
-			});
-			setTimeout(() => setMessage({ type: "", text: "" }), 3000);
-		} finally {
-			setSearching(false);
-		}
-	};
-
-	// Handle Enter key in search input
-	const handleSearchKeyPress = (e) => {
-		if (e.key === "Enter") {
-			e.preventDefault(); // Prevent form submission
-			handleSearch();
-		}
-	};
-
-	// Handle result selection - FIXED: Auto-fill address
-	const handleSelectResult = (result) => {
-		const { y, x, label } = result; // y = latitude, x = longitude
-		const newPosition = { lat: y, lng: x };
-
-		setMapPosition(newPosition);
-		setMapCenter([y, x]);
-		setShowResults(false);
-		setSearchQuery(label);
-
-		// FIXED: Auto-fill street address
-		setFormData((prev) => ({
-			...prev,
-			street_address: label,
-		}));
-
-		setMessage({
-			type: "success",
-			text: "Location selected! Address auto-filled.",
-		});
-		setTimeout(() => setMessage({ type: "", text: "" }), 3000);
-	};
-
-	// Use current location
-	const handleUseCurrentLocation = () => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					const { latitude, longitude } = position.coords;
-					const newPosition = { lat: latitude, lng: longitude };
-					setMapPosition(newPosition);
-					setMapCenter([latitude, longitude]);
-					setMessage({
-						type: "success",
-						text: "Current location set successfully!",
-					});
-					setTimeout(() => setMessage({ type: "", text: "" }), 3000);
-				},
-				(error) => {
-					setMessage({
-						type: "error",
-						text: "Unable to get your location. Please enable location services.",
-					});
-					setTimeout(() => setMessage({ type: "", text: "" }), 5000);
-				},
-			);
+	/* ── Place / move marker and update state ──────────────────── */
+	const placeMarker = (L, map, lat, lng) => {
+		if (markerRef.current) {
+			markerRef.current.setLatLng([lat, lng]);
 		} else {
-			setMessage({
-				type: "error",
-				text: "Geolocation is not supported by your browser.",
+			markerRef.current = L.marker([lat, lng], {
+				icon:      buildIcon(L),
+				draggable: true,
+			}).addTo(map);
+
+			markerRef.current.on("dragend", (ev) => {
+				const p = ev.target.getLatLng();
+				setForm((prev) => ({
+					...prev,
+					latitude:  p.lat.toFixed(6),
+					longitude: p.lng.toFixed(6),
+				}));
+				setLocationMsg("📍 Location updated.");
 			});
 		}
+
+		setForm((prev) => ({
+			...prev,
+			latitude:  lat.toFixed(6),
+			longitude: lng.toFixed(6),
+		}));
 	};
+
+	/* ── Init map once Leaflet ready ───────────────────────────── */
+	useEffect(() => {
+		if (!mapReady || !mapRef.current || leafletMap.current) return;
+
+		const L   = window.L;
+		const map = L.map(mapRef.current).setView([18.5204, 73.8567], 13);
+
+		L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+			attribution: "© OpenStreetMap contributors",
+			maxZoom: 19,
+		}).addTo(map);
+
+		map.on("click", (e) => {
+			placeMarker(L, map, e.latlng.lat, e.latlng.lng);
+			setLocationMsg("📍 Location pinned! Drag the marker to fine-tune.");
+		});
+
+		leafletMap.current = map;
+	}, [mapReady]);
+
+	/* ── GPS button ────────────────────────────────────────────── */
+	const handleUseMyLocation = () => {
+		if (!navigator.geolocation)
+			return setLocationMsg("❌ Geolocation not supported by your browser.");
+
+		setLocationMsg("🔍 Getting your location...");
+		navigator.geolocation.getCurrentPosition(
+			(pos) => {
+				const { latitude: lat, longitude: lng } = pos.coords;
+				const map = leafletMap.current;
+				if (map && window.L) {
+					map.setView([lat, lng], 17);
+					placeMarker(window.L, map, lat, lng);
+				}
+				setLocationMsg("✅ Location found! Drag the marker to adjust.");
+			},
+			() => setLocationMsg("❌ Could not get location. Pin manually on the map."),
+		);
+	};
+
+	/* ── Nominatim landmark search ─────────────────────────────── */
+	const handleLandmarkSearch = async () => {
+		if (!landmarkQuery.trim()) return;
+		setSearchLoading(true);
+		setLandmarkResults([]);
+		try {
+			const res  = await fetch(
+				`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(landmarkQuery)}&format=json&limit=5`,
+				{ headers: { "Accept-Language": "en" } },
+			);
+			const data = await res.json();
+			setLandmarkResults(data);
+		} catch {
+			setLocationMsg("❌ Landmark search failed. Try pinning on the map.");
+		} finally {
+			setSearchLoading(false);
+		}
+	};
+
+	const handleSelectLandmark = (result) => {
+		const lat = parseFloat(result.lat);
+		const lng = parseFloat(result.lon);
+		const map = leafletMap.current;
+		if (map && window.L) {
+			map.setView([lat, lng], 17);
+			placeMarker(window.L, map, lat, lng);
+		}
+		setLandmarkResults([]);
+		setLandmarkQuery("");
+		setLocationMsg(`📍 Pinned: ${result.display_name.split(",").slice(0, 3).join(", ")}`);
+	};
+
+	/* ── Form helpers ──────────────────────────────────────────── */
+	const handleChange = (e) =>
+		setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setError("");
+
+		if (form.password !== form.confirmPassword)
+			return setError("Passwords do not match.");
+		if (form.password.length < 6)
+			return setError("Password must be at least 6 characters.");
+
 		setLoading(true);
-		setMessage({ type: "", text: "" });
-
-		if (!mapPosition) {
-			setMessage({
-				type: "error",
-				text: "Please select your location on the map",
-			});
-			setLoading(false);
-			return;
-		}
-
 		try {
-			const submitData = {
-				...formData,
-				latitude: mapPosition.lat,
-				longitude: mapPosition.lng,
-			};
-
-			const response = await fetch(`${API_BASE_URL}/customers`, {
-				method: "POST",
+			const res = await fetch(`${API_BASE_URL}/customers/signup`, {
+				method:  "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(submitData),
+				body: JSON.stringify({
+					customer_name:       form.customer_name,
+					business_name:       form.business_name       || null,
+					contact_number:      form.contact_number,
+					email:               form.email               || null,
+					street_address:      form.street_address      || null,
+					city:                form.city                || null,
+					gst_number:          form.gst_number          || null,
+					food_licence_number: form.food_licence_number || null,
+					latitude:            form.latitude            || null,
+					longitude:           form.longitude           || null,
+					password:            form.password,
+				}),
 			});
+			const data = await res.json();
+			if (!res.ok) return setError(data.error || "Signup failed.");
 
-			const data = await response.json();
-
-			if (response.ok) {
-				setMessage({
-					type: "success",
-					text: "Registration successful! Welcome aboard! 🎉",
-				});
-
-				setFormData({
-					customer_name: "",
-					business_name: "",
-					contact_number: "",
-					street_address: "",
-					gst_number: "",
-					food_licence_number: "",
-					email: "",
-				});
-				setMapPosition(null);
-				setShowMap(false);
-				setSearchQuery("");
-				setSearchResults([]);
-			} else {
-				setMessage({
-					type: "error",
-					text: data.error || "Registration failed",
-				});
-			}
-		} catch (error) {
-			console.error("Error:", error);
-			setMessage({ type: "error", text: "Network error. Please try again." });
+			await login(form.contact_number, form.password);
+			navigate("/client");
+		} catch {
+			setError("Network error. Please try again.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	/* ── Render ────────────────────────────────────────────────── */
 	return (
-		<div className="customer-signup-container">
-			<div className="signup-header">
-				<h1 className="signup-title">Customer Registration</h1>
-				<p className="signup-subtitle">Join us and start ordering today!</p>
-			</div>
+		<section className="auth-page">
+			<nav className="auth-nav">
+				<img
+					src="/logo-white.png"
+					alt="logo"
+					className="nav__logo"
+					onClick={() => navigate("/")}
+				/>
+			</nav>
 
-			<form onSubmit={handleSubmit} className="signup-form">
-				{/* Personal Information */}
-				<div className="form-section">
-					<h3 className="section-title">Personal Information</h3>
+			<div className="auth-container">
+				<div className="auth-card auth-card--wide">
+					<h2 className="auth-card__title">Create Account</h2>
+					<p className="auth-card__subtitle">Join us for wholesale prices</p>
 
-					<div className="form-row">
-						<div className="form-group">
-							<label htmlFor="customer_name">Full Name *</label>
-							<input
-								type="text"
-								id="customer_name"
-								name="customer_name"
-								value={formData.customer_name}
-								onChange={handleInputChange}
-								placeholder="Enter your full name"
-								required
-							/>
+					{error && <div className="auth-error">{error}</div>}
+
+					<form className="auth-form" onSubmit={handleSubmit}>
+
+						{/* Personal & Business */}
+						<p className="auth-form__section-title">Personal &amp; Business Details</p>
+
+						<div className="auth-form__row">
+							<div className="auth-form__group">
+								<label className="auth-form__label">Full Name *</label>
+								<input name="customer_name" type="text" required
+									className="auth-form__input" placeholder="Your full name"
+									value={form.customer_name} onChange={handleChange} />
+							</div>
+							<div className="auth-form__group">
+								<label className="auth-form__label">Business / Shop Name</label>
+								<input name="business_name" type="text"
+									className="auth-form__input" placeholder="Shop or business name"
+									value={form.business_name} onChange={handleChange} />
+							</div>
 						</div>
 
-						<div className="form-group">
-							<label htmlFor="contact_number">Contact Number *</label>
-							<input
-								type="tel"
-								id="contact_number"
-								name="contact_number"
-								value={formData.contact_number}
-								onChange={handleContactChange}
-								placeholder="10-digit mobile number"
-								pattern="[6-9][0-9]{9}"
-								required
-							/>
-							<span className="input-hint">
-								{formData.contact_number.length}/10
-							</span>
-						</div>
-					</div>
-
-					<div className="form-group">
-						<label htmlFor="email">Email (Optional)</label>
-						<input
-							type="email"
-							id="email"
-							name="email"
-							value={formData.email}
-							onChange={handleInputChange}
-							placeholder="your.email@example.com"
-						/>
-					</div>
-				</div>
-
-				{/* Business Information */}
-				<div className="form-section">
-					<h3 className="section-title">Business Information</h3>
-
-					<div className="form-group">
-						<label htmlFor="business_name">Business Name *</label>
-						<input
-							type="text"
-							id="business_name"
-							name="business_name"
-							value={formData.business_name}
-							onChange={handleInputChange}
-							placeholder="Enter your business/shop name"
-							required
-						/>
-					</div>
-
-					<div className="form-row">
-						<div className="form-group">
-							<label htmlFor="gst_number">GST Number *</label>
-							<input
-								type="text"
-								id="gst_number"
-								name="gst_number"
-								value={formData.gst_number}
-								onChange={handleGSTChange}
-								placeholder="22AAAAA0000A1Z5"
-								pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}"
-								maxLength="15"
-								required
-							/>
-							<span className="input-hint">
-								{formData.gst_number.length}/15
-							</span>
+						<div className="auth-form__row">
+							<div className="auth-form__group">
+								<label className="auth-form__label">Contact Number *</label>
+								<input name="contact_number" type="tel" required
+									className="auth-form__input" placeholder="Your mobile number"
+									value={form.contact_number} onChange={handleChange} />
+							</div>
+							<div className="auth-form__group">
+								<label className="auth-form__label">Email (optional)</label>
+								<input name="email" type="email"
+									className="auth-form__input" placeholder="Your email"
+									value={form.email} onChange={handleChange} />
+							</div>
 						</div>
 
-						<div className="form-group">
-							<label htmlFor="food_licence_number">Food Licence Number *</label>
-							<input
-								type="text"
-								id="food_licence_number"
-								name="food_licence_number"
-								value={formData.food_licence_number}
-								onChange={handleInputChange}
-								placeholder="Enter FSSAI licence number"
-								required
-							/>
-						</div>
-					</div>
-				</div>
+						{/* Licences */}
+						<p className="auth-form__section-title">Business Licences</p>
 
-				{/* Location Information */}
-				<div className="form-section">
-					<h3 className="section-title">Location Information</h3>
-
-					<div className="form-group">
-						<label htmlFor="street_address">Street Address *</label>
-						<textarea
-							id="street_address"
-							name="street_address"
-							value={formData.street_address}
-							onChange={handleInputChange}
-							placeholder="Shop No., Building, Street, Landmark, City, Pincode"
-							rows="3"
-							required
-						/>
-					</div>
-
-					<div className="map-section">
-						<div className="map-header">
-							<label>Pin Your Location on Map *</label>
-							<button
-								type="button"
-								className="toggle-map-btn"
-								onClick={() => setShowMap(!showMap)}
-							>
-								{showMap ? "Hide Map" : "Show Map"}
-							</button>
+						<div className="auth-form__row">
+							<div className="auth-form__group">
+								<label className="auth-form__label">GST Number</label>
+								<input name="gst_number" type="text"
+									className="auth-form__input" placeholder="e.g. 27AABCU9603R1ZX"
+									value={form.gst_number} onChange={handleChange} />
+							</div>
+							<div className="auth-form__group">
+								<label className="auth-form__label">FSSAI Licence Number</label>
+								<input name="food_licence_number" type="text"
+									className="auth-form__input" placeholder="Food licence number"
+									value={form.food_licence_number} onChange={handleChange} />
+							</div>
 						</div>
 
-						{showMap && (
-							<div className="map-container">
-								{/* Search Bar - FIXED: Changed from form to div */}
-								<div className="map-search-container">
-									<div className="search-form">
-										<input
-											type="text"
-											className="map-search-input"
-											placeholder="Search for landmarks, addresses, or places..."
-											value={searchQuery}
-											onChange={handleSearchChange}
-											onKeyPress={handleSearchKeyPress}
-										/>
-										<button
-											type="button"
-											className="search-btn"
-											onClick={handleSearch}
-											disabled={searching}
-										>
-											{searching ? "🔍 Searching..." : "🔍 Search"}
-										</button>
-										<button
-											type="button"
-											className="current-location-btn"
-											onClick={handleUseCurrentLocation}
-											title="Use current location"
-										>
-											📍 My Location
-										</button>
-									</div>
+						{/* Address */}
+						<p className="auth-form__section-title">Address</p>
 
-									{/* Search Results Dropdown */}
-									{showResults && searchResults.length > 0 && (
-										<div className="search-results-dropdown">
-											{searchResults.map((result, index) => (
-												<div
-													key={index}
-													className="search-result-item"
-													onClick={() => handleSelectResult(result)}
-												>
-													<span className="result-icon">📍</span>
-													<div className="result-details">
-														<p className="result-label">{result.label}</p>
-													</div>
-												</div>
-											))}
+						<div className="auth-form__group">
+							<label className="auth-form__label">Street Address</label>
+							<input name="street_address" type="text"
+								className="auth-form__input" placeholder="Shop no., street name"
+								value={form.street_address} onChange={handleChange} />
+						</div>
+
+						<div className="auth-form__group auth-form__group--half">
+							<label className="auth-form__label">City</label>
+							<input name="city" type="text"
+								className="auth-form__input" placeholder="City"
+								value={form.city} onChange={handleChange} />
+						</div>
+
+						{/* Map */}
+						<p className="auth-form__section-title">
+							Shop Location
+							<span className="auth-form__section-note"> — pin for delivery routing</span>
+						</p>
+
+						<div className="signup-map-wrapper">
+							{/* Search bar */}
+							<div className="signup-map__search">
+								<input
+									type="text"
+									className="auth-form__input signup-map__search-input"
+									placeholder="Search landmark, area or address…"
+									value={landmarkQuery}
+									onChange={(e) => setLandmarkQuery(e.target.value)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") { e.preventDefault(); handleLandmarkSearch(); }
+									}}
+								/>
+								<button type="button" className="signup-map__search-btn"
+									onClick={handleLandmarkSearch} disabled={searchLoading}>
+									{searchLoading ? "…" : "Search"}
+								</button>
+								<button type="button" className="signup-map__gps-btn"
+									onClick={handleUseMyLocation}>
+									📍 My Location
+								</button>
+							</div>
+
+							{/* Results dropdown */}
+							{landmarkResults.length > 0 && (
+								<div className="signup-map__results">
+									{landmarkResults.map((r, i) => (
+										<div key={i} className="signup-map__result-item"
+											onClick={() => handleSelectLandmark(r)}>
+											{r.display_name}
 										</div>
-									)}
-
-									{showResults && searchResults.length === 0 && (
-										<div className="search-results-dropdown">
-											<div className="no-results">
-												No results found. Try a different search term.
-											</div>
-										</div>
-									)}
+									))}
 								</div>
+							)}
 
-								<p className="map-instruction">
-									📍 Click on the map to set your exact location
-								</p>
+							{/* Leaflet canvas */}
+							<div ref={mapRef} className="signup-map__canvas" />
 
-								<MapContainer
-									center={mapCenter}
-									zoom={13}
-									className="leaflet-map"
-								>
-									<TileLayer
-										attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-										url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-									/>
-									<LocationMarker
-										position={mapPosition}
-										setPosition={setMapPosition}
-									/>
-								</MapContainer>
+							{locationMsg && <p className="signup-map__msg">{locationMsg}</p>}
 
-								{mapPosition && (
-									<div className="location-display">
-										<p>
-											<strong>Selected Location:</strong>
-										</p>
-										<p>Latitude: {mapPosition.lat.toFixed(6)}</p>
-										<p>Longitude: {mapPosition.lng.toFixed(6)}</p>
-									</div>
-								)}
+							{form.latitude && form.longitude && (
+								<div className="signup-map__coords">
+									<span>Lat: <strong>{form.latitude}</strong></span>
+									<span>Lng: <strong>{form.longitude}</strong></span>
+								</div>
+							)}
+
+							<p className="signup-map__hint">
+								Search for your area, use GPS, or click on the map to pin your shop.
+								Drag the marker to fine-tune the location.
+							</p>
+						</div>
+
+						{/* Password */}
+						<p className="auth-form__section-title">Set Password</p>
+
+						<div className="auth-form__row">
+							<div className="auth-form__group">
+								<label className="auth-form__label">Password *</label>
+								<input name="password" type="password" required
+									className="auth-form__input" placeholder="Min 6 characters"
+									value={form.password} onChange={handleChange} />
 							</div>
-						)}
-
-						{!showMap && mapPosition && (
-							<div className="location-confirmed">
-								✅ Location selected: {mapPosition.lat.toFixed(4)},{" "}
-								{mapPosition.lng.toFixed(4)}
+							<div className="auth-form__group">
+								<label className="auth-form__label">Confirm Password *</label>
+								<input name="confirmPassword" type="password" required
+									className="auth-form__input" placeholder="Repeat password"
+									value={form.confirmPassword} onChange={handleChange} />
 							</div>
-						)}
-					</div>
+						</div>
+
+						<button type="submit" className="auth-form__btn" disabled={loading}>
+							{loading ? "Creating account…" : "Create Account"}
+						</button>
+					</form>
+
+					<div className="auth-card__skip">
+					<span className="auth-card__skip-text">Just browsing?</span>
+					<button
+						type="button"
+						className="auth-card__skip-btn"
+						onClick={() => navigate("/client")}
+					>
+						Skip, browse as guest →
+					</button>
 				</div>
 
-				{/* Message Display */}
-				{message.text && (
-					<div className={`message message--${message.type}`}>
-						{message.text}
-					</div>
-				)}
-
-				{/* Submit Button */}
-				<button type="submit" className="submit-btn" disabled={loading}>
-					{loading ? "Registering..." : "Register Now"}
-				</button>
-			</form>
-		</div>
+				<p className="auth-card__switch">
+						Already have an account?{" "}
+						<Link to="/login" className="auth-card__link">Sign in</Link>
+					</p>
+				</div>
+			</div>
+		</section>
 	);
 }
-
-export default CustomerSignup;
